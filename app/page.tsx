@@ -249,16 +249,33 @@ export default async function HomePage() {
 
       {/* 5. MONTE SEU ROTEIRO CTA WIZARD */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#183A32] text-[#FCFAF5] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-[#82967A]/30">
+        <div className="bg-[#183A32] text-[#FCFAF5] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-[#82967A]/30">
+          {/* REALISTIC PHOTO BACKGROUND WITH VERDE MATA OVERLAY */}
+          <Image
+            src="/images/banner-roteiro.jpg"
+            alt="Casal desfrutando de vinho e gastronomia nos vinhedos de São Roque"
+            fill
+            className="object-cover object-center opacity-35 transition-transform duration-1000"
+            sizes="(max-width: 1200px) 100vw, 1200px"
+          />
+
+          {/* GRADIENT OVERLAY FOR MAXIMUM READABILITY */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(90deg, rgba(24,58,50,0.92) 0%, rgba(24,58,50,0.85) 50%, rgba(24,58,50,0.55) 100%)'
+            }}
+          />
+
           <div className="relative z-10 max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 bg-[#D49A3A] text-[#26332F] font-bold text-xs px-3.5 py-1.5 rounded-full">
+            <div className="inline-flex items-center gap-2 bg-[#D49A3A] text-[#26332F] font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md">
               <Compass className="w-4 h-4 text-[#26332F]" aria-hidden="true" />
               <span>Roteiro Inteligente em 3 Passos</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight drop-shadow-md">
               Não sabe por onde começar? Monte seu roteiro personalizado!
             </h2>
-            <p className="text-sm text-[#F4EBDD] leading-relaxed">
+            <p className="text-sm sm:text-base text-[#F4EBDD] leading-relaxed drop-shadow-sm">
               Responda a 3 perguntas simples e nossa inteligência vai sugerir a sequência perfeita de vinícolas, almoço e passeios para o seu dia.
             </p>
             <div className="pt-2">
