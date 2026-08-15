@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* OFFICIAL PALETTE - SERRA & VINHO */
+    --color-forest: #183A32;      /* Verde Mata (25%) */
+    --color-wine: #722F3E;        /* Vinho São Roque (10%) */
+    --color-sage: #82967A;        /* Verde Sálvia */
+    --color-terracotta: #B86F52;  /* Terracota */
+    --color-sand: #F4EBDD;        /* Areia */
+    --color-gold: #D49A3A;        /* Dourado Sol (5%) */
+    --color-cream: #FCFAF5;       /* Creme (60%) */
+    --color-graphite: #26332F;    /* Grafite */
+
+    /* SYSTEM MAP */
+    --background: var(--color-cream);
+    --foreground: var(--color-graphite);
+    
+    --brand-forest: var(--color-forest);
+    --brand-forest-light: #245247;
+    --brand-wine: var(--color-wine);
+    --brand-wine-light: #8d3d4e;
+    --brand-sand: var(--color-sand);
+    --brand-gold: var(--color-gold);
+    --brand-sage: var(--color-sage);
+    --brand-terracotta: var(--color-terracotta);
+    --brand-cream: var(--color-cream);
+    --brand-graphite: var(--color-graphite);
+    
+    --card-bg: #ffffff;
+    --border-color: #e6dfd4;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom visual utility classes for Serra & Vinho design system */
+.bg-forest {
+  background-color: var(--color-forest);
+}
+
+.bg-forest-light {
+  background-color: var(--brand-forest-light);
+}
+
+.bg-wine {
+  background-color: var(--color-wine);
+}
+
+.bg-sage {
+  background-color: var(--color-sage);
+}
+
+.bg-terracotta {
+  background-color: var(--color-terracotta);
+}
+
+.bg-sand {
+  background-color: var(--color-sand);
+}
+
+.bg-cream {
+  background-color: var(--color-cream);
+}
+
+.text-forest {
+  color: var(--color-forest);
+}
+
+.text-wine {
+  color: var(--color-wine);
+}
+
+.text-sage {
+  color: var(--color-sage);
+}
+
+.text-terracotta {
+  color: var(--color-terracotta);
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.text-graphite {
+  color: var(--color-graphite);
+}
+
+.border-brand {
+  border-color: var(--border-color);
+}
+
+/* Glassmorphism search bar & panels */
+.glass-panel {
+  background: rgba(252, 250, 245, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-dark {
+  background: rgba(24, 58, 50, 0.90);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Card hover animation */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(24, 58, 50, 0.12);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FCFAF5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dcd4c5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #183A32;
+}
