@@ -1,4 +1,4 @@
-import { EventType, PeriodFilter, AnalyticsMetrics, TopBusinessMetric, Business } from '@/types';
+import { EventType, PeriodFilter, AnalyticsMetrics, TopBusinessMetric } from '@/types';
 import { createClient } from '@/lib/supabase/client';
 import { getAllBusinessesAdmin } from '@/lib/services/data';
 
@@ -12,7 +12,7 @@ interface LogEventOptions {
 }
 
 // In-memory events storage for DEMO fallback analytics
-let memoryEvents: Array<LogEventOptions & { created_at: string }> = [
+const memoryEvents: Array<LogEventOptions & { created_at: string }> = [
   { event_type: 'page_view', page: '/', created_at: new Date().toISOString() },
   { event_type: 'business_view', business_id: 'biz-1', created_at: new Date().toISOString() },
   { event_type: 'business_view', business_id: 'biz-1', created_at: new Date().toISOString() },
@@ -67,7 +67,7 @@ export async function logBusinessEvent(
     } else {
       console.log(`[DEMO Analytics Log] ${payload.event_type}`, payload);
     }
-  } catch (err) {
+  } catch {
     // Silent failure so UI navigation is never blocked
   }
 }

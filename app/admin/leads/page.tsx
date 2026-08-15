@@ -98,7 +98,7 @@ export default function AdminLeadsPage() {
 
                     {lead.message && (
                       <p className="text-xs text-[#52615B] italic bg-[#FCFAF5] p-2.5 rounded-xl border border-[#e6dfd4] max-w-2xl">
-                        "{lead.message}"
+                        &quot;{lead.message}&quot;
                       </p>
                     )}
                   </div>

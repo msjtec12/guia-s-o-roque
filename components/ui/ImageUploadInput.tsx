@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import Image from 'next/image';
-import { UploadCloud, Link as LinkIcon, X, ImageIcon } from 'lucide-react';
+import { UploadCloud, Link as LinkIcon, X } from 'lucide-react';
 
 interface ImageUploadInputProps {
   value: string;

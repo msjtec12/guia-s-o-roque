@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
-import { Sparkles, Compass } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { getExperiences } from '@/lib/services/data';
 import { ExperienceCard } from '@/components/tourism/ExperienceCard';
 import { constructMetadata } from '@/lib/seo/metadata';

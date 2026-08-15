@@ -8,18 +8,13 @@ import {
   Utensils, 
   Hotel, 
   Trees, 
-  MapPin, 
-  Calendar,
   Heart,
   Users,
   Bus,
   Compass as Adventure,
   ShoppingBag,
   Landmark,
-  Coffee,
-  ArrowRight,
-  ChevronRight,
-  Building2
+  ChevronRight
 } from 'lucide-react';
 import { 
   getCategories, 

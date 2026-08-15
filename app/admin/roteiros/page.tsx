@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { 
-  MapPin, 
   Plus, 
   Trash2, 
   Edit3, 
@@ -258,7 +257,7 @@ export default function AdminRoteirosPage() {
                   <label className="font-bold text-[#26332F] block mb-1">Status</label>
                   <select
                     value={editingRoute.status || 'published'}
-                    onChange={(e) => setEditingRoute({ ...editingRoute, status: e.target.value as any })}
+                    onChange={(e) => setEditingRoute({ ...editingRoute, status: e.target.value as Route['status'] })}
                     className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F]"
                   >
                     <option value="published">Publicado</option>

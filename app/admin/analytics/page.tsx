@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { 
   Eye, 
   MessageCircle, 
@@ -31,11 +30,7 @@ export default function AdminAnalyticsPage() {
   const [topViews, setTopViews] = useState<TopBusinessMetric[]>([]);
   const [topWhatsApp, setTopWhatsApp] = useState<TopBusinessMetric[]>([]);
 
-  useEffect(() => {
-    loadData();
-  }, [period]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     const [m, topData] = await Promise.all([
       getAnalyticsMetrics(period),
       getTopBusinessesAnalytics(),
@@ -43,7 +38,11 @@ export default function AdminAnalyticsPage() {
     setMetrics(m);
     setTopViews(topData.topByViews);
     setTopWhatsApp(topData.topByWhatsApp);
-  };
+  }, [period]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return (
     <div className="space-y-8 bg-[#FCFAF5]">

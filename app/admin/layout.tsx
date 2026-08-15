@@ -26,18 +26,20 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  // If we are on /admin/login, render only children (login page) without sidebar layout
-  if (pathname === '/admin/login') {
-    return <>{children}</>;
-  }
-
   useEffect(() => {
+    if (pathname === '/admin/login') return;
+
     // Client-side authentication check
     const hasAuthCookie = document.cookie.includes('admin_session=authenticated');
     if (!hasAuthCookie) {
       router.push('/admin/login');
     }
   }, [pathname, router]);
+
+  // If we are on /admin/login, render only children (login page) without sidebar layout
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   const handleLogout = async () => {
     // Clear admin auth cookie
@@ -118,7 +120,7 @@ export default function AdminLayout({
           <button
             onClick={handleLogout}
             aria-label="Sair do painel administrativo"
-            className="w-full flex items-center gap-2 text-xs text-rose-300 hover:text-rose-100 transition-colors pt-1"
+            className="w-full flex items-center gap-2 text-xs text-rose-300 hover:text-rose-100 transition-colors pt-1 cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Sair do Painel</span>

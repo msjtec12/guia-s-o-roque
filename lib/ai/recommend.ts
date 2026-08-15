@@ -32,7 +32,7 @@ export async function getAIRecommendations(query: AIRecommendationQuery): Promis
 
   // Keyword parsing logic stub
   let matchedBusinesses = businesses;
-  let matchedExperiences = experiences;
+  const matchedExperiences = experiences;
 
   if (promptLower.includes('criança') || promptLower.includes('família')) {
     matchedBusinesses = businesses.filter(

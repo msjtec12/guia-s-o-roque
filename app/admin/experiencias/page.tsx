@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { 
-  Sparkles, 
   Plus, 
   Trash2, 
   Edit3, 

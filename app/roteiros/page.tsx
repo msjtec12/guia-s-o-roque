@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { MapPin, Sparkles, ArrowRight } from 'lucide-react';
+import { MapPin, Sparkles } from 'lucide-react';
 import { getRoutes } from '@/lib/services/data';
 import { RouteCard } from '@/components/tourism/RouteCard';
 import { constructMetadata } from '@/lib/seo/metadata';

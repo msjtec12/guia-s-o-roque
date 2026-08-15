@@ -9,7 +9,6 @@ import {
   Eye, 
   EyeOff, 
   Crown, 
-  Sparkles, 
   X,
   Search
 } from 'lucide-react';

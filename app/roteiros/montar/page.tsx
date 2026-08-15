@@ -124,7 +124,7 @@ export default function MonteSeuRoteiroPage() {
               return (
                 <button
                   key={option.id}
-                  onClick={() => setTravelers(option.id as any)}
+                  onClick={() => setTravelers(option.id as typeof travelers)}
                   aria-label={`Selecionar viagem com ${option.label}`}
                   className={`p-6 rounded-2xl border text-left transition-all space-y-2 ${
                     travelers === option.id
@@ -173,7 +173,7 @@ export default function MonteSeuRoteiroPage() {
               return (
                 <button
                   key={option.id}
-                  onClick={() => setDuration(option.id as any)}
+                  onClick={() => setDuration(option.id as typeof duration)}
                   aria-label={`Selecionar duração ${option.label}`}
                   className={`p-6 rounded-2xl border text-center transition-all space-y-2 flex flex-col items-center justify-center ${
                     duration === option.id

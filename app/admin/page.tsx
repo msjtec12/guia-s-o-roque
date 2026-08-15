@@ -12,19 +12,13 @@ import {
 } from 'lucide-react';
 import { 
   getAllBusinessesAdmin, 
-  getPartnerLeads, 
-  getExperiences, 
-  getRoutes, 
-  getEvents 
+  getPartnerLeads,
 } from '@/lib/services/data';
 
 export default async function AdminDashboardPage() {
-  const [businesses, leads, experiences, routes, events] = await Promise.all([
+  const [businesses, leads] = await Promise.all([
     getAllBusinessesAdmin(),
     getPartnerLeads(),
-    getExperiences(),
-    getRoutes(),
-    getEvents(),
   ]);
 
   const publishedCount = businesses.filter((b) => b.status === 'published').length;
