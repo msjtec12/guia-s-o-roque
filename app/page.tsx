@@ -57,14 +57,6 @@ export default async function HomePage() {
     (b) => b.category?.slug === 'restaurantes' || b.category?.slug === 'cafes-docerias'
   ).slice(0, 3);
 
-  const accommodationBusinesses = businesses.filter(
-    (b) => b.category?.slug === 'hospedagem'
-  ).slice(0, 2);
-
-  const attractionBusinesses = businesses.filter(
-    (b) => b.category?.slug === 'natureza-trilhas' || b.category?.slug === 'passeios-agencias'
-  ).slice(0, 3);
-
   const quickExperienceTypes = [
     { label: 'Vinho & Gastronomia', icon: Wine, href: '/explorar?tag=vinho', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
     { label: 'Romântico & Casal', icon: Heart, href: '/explorar?tag=romantico', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
@@ -79,59 +71,84 @@ export default async function HomePage() {
   return (
     <div className="space-y-16 pb-20 bg-[#FCFAF5]">
       
-      {/* 1. HERO SECTION (ENCANTOS DE SÃO ROQUE AO ENTARDECER) */}
-      <section className="relative min-h-[620px] sm:min-h-[680px] flex items-center justify-center overflow-hidden bg-[#183A32] text-[#FCFAF5]">
+      {/* 1. HERO SECTION DESKTOP & MOBILE */}
+      <section className="relative min-h-[620px] sm:min-h-[670px] lg:min-h-[70vh] flex items-center justify-center overflow-hidden bg-[#183A32] text-[#FCFAF5]">
+        
+        {/* NEW HERO IMAGE (PRESERVES VINEYARDS AND LANDSCAPE ON DESKTOP & MOBILE) */}
         <Image
-          src="/hero.jfif"
-          alt="Encantos de São Roque ao Entardecer - Vinhedos e Paisagens"
+          src="/images/hero-sao-roque.webp"
+          alt="Paisagem de vinhedos e natureza de São Roque, São Paulo"
           fill
           priority
-          className="object-cover opacity-90 scale-100 transition-transform duration-1000"
           sizes="100vw"
+          className="object-cover object-[60%_center] sm:object-center opacity-95 transition-all duration-1000"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26332F]/80 via-[#183A32]/40 to-[#183A32]/60" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-8 py-16">
+        {/* ELEGANT VERDE MATA OVERLAY GRADIENT */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(180deg, rgba(24,58,50,0.35) 0%, rgba(24,58,50,0.55) 50%, rgba(24,58,50,0.82) 100%)'
+          }}
+        />
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8 py-12 sm:py-16">
           
           {/* BADGE SUPERIOR */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#183A32]/85 text-[#FCFAF5] text-xs sm:text-sm font-medium backdrop-blur-md border border-white/20 shadow-lg">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#183A32]/85 text-[#FCFAF5] text-xs sm:text-sm font-medium backdrop-blur-md border border-white/20 shadow-lg">
             <Wine className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
             <span>Estância Turística de São Roque - SP</span>
           </div>
 
-          {/* TÍTULO HERO */}
-          <div className="space-y-4">
-            <h1 className="font-serif text-5xl sm:text-7xl font-bold tracking-tight text-[#FCFAF5] drop-shadow-md">
+          {/* TÍTULO HERO (HIERARQUIA E DOURADO #D49A3A) */}
+          <div className="space-y-3 sm:space-y-4">
+            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#FCFAF5] drop-shadow-md leading-tight">
               Descubra <span className="text-[#D49A3A]">São Roque</span>
             </h1>
-            <p className="text-lg sm:text-2xl text-[#FCFAF5] font-serif italic max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
+            <p className="text-base sm:text-xl lg:text-2xl text-[#FCFAF5] font-serif italic max-w-2xl mx-auto leading-relaxed drop-shadow-sm opacity-95">
               &ldquo;Descubra lugares, experiências e sabores de São Roque.&rdquo;
             </p>
           </div>
 
-          {/* BARRA DE PESQUISA CENTRAL */}
-          <div className="max-w-2xl mx-auto space-y-4">
+          {/* BARRA DE PESQUISA CENTRAL (FLUTUANTE PREMIUM) */}
+          <div className="w-full max-w-2xl mx-auto space-y-4 px-2 sm:px-0">
             <SearchBar placeholder="O que você quer descobrir? Ex.: vinícolas, restaurantes, passeios..." />
 
-            {/* BUSCAS POPULARES CHIPS */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs">
-              <span className="text-[#FCFAF5] font-medium drop-shadow-sm">Buscas populares:</span>
-              <Link href="/explorar?category=vinicolas-adegas" className="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/50 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
+            {/* BUSCAS POPULARES (CHIPS COM ÍCONES LUCIDE SVG) */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
+              <span className="text-[#FCFAF5] font-medium drop-shadow-xs shrink-0">Buscas populares:</span>
+              
+              <Link href="/explorar?category=vinicolas-adegas" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
                 <Wine className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
                 <span>Vinícolas</span>
               </Link>
-              <Link href="/explorar?category=restaurantes" className="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/50 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
+              
+              <Link href="/explorar?category=restaurantes" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
                 <Utensils className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
                 <span>Restaurantes</span>
               </Link>
-              <Link href="/explorar?tag=romantico" className="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/50 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Heart className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Roteiro Romântico</span>
+
+              <Link href="/explorar?category=hospedagem" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
+                <Hotel className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+                <span>Onde ficar</span>
+              </Link>
+
+              <Link href="/explorar?tag=natureza" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
+                <Trees className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+                <span>Natureza</span>
+              </Link>
+
+              <Link href="/explorar?category=passeios-agencias" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
+                <Bus className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+                <span>Passeios</span>
               </Link>
             </div>
           </div>
 
         </div>
+
+        {/* TRANSIÇÃO SUAVE PARA A PRÓXIMA SEÇÃO (#FCFAF5) */}
+        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-[#FCFAF5] to-transparent pointer-events-none" />
       </section>
 
       {/* 2. CHIPS DE EXPERIÊNCIAS RÁPIDAS */}
@@ -344,7 +361,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 9. BANDER PARCEIRO ANUNCIANTE CTA */}
+      {/* 9. BANNER PARCEIRO ANUNCIANTE CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PartnerCTA />
       </section>
