@@ -49,22 +49,22 @@ export function CitySelector({ variant = 'navbar', className = '' }: CitySelecto
         onClick={() => setIsOpen(!isOpen)}
         className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
           variant === 'navbar'
-            ? 'bg-[#245247] hover:bg-[#2d6255] text-[#FCFAF5] border border-[#82967A]/30 shadow-xs'
+            ? 'bg-[#1B4931] hover:bg-[#1B4931]/80 text-[#FFFFFF] border border-[#1B4931]/40 shadow-xs'
             : variant === 'hero'
-            ? 'bg-white/90 hover:bg-white text-[#183A32] shadow-md border border-[#e6dfd4]'
-            : 'text-[#26332F] hover:text-[#183A32]'
+            ? 'bg-white/95 hover:bg-white text-[#071510] shadow-md border border-[#E7E5DF]'
+            : 'text-[#26332F] hover:text-[#1B4931]'
         }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="Selecionar destino turístico"
       >
-        <MapPin className="w-3.5 h-3.5 text-[#D49A3A] shrink-0" aria-hidden="true" />
+        <MapPin className="w-3.5 h-3.5 text-[#F19F14] shrink-0" aria-hidden="true" />
         <span className="truncate max-w-[130px] sm:max-w-none">
           {currentCity ? currentCity.name : 'Escolher Destino'}
         </span>
         <ChevronDown
-          className={`w-3.5 h-3.5 text-[#82967A] transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-[#D49A3A]' : ''
+          className={`w-3.5 h-3.5 text-[#E7E5DF] transition-transform duration-200 ${
+            isOpen ? 'rotate-180 text-[#F19F14]' : ''
           }`}
           aria-hidden="true"
         />
@@ -72,9 +72,9 @@ export function CitySelector({ variant = 'navbar', className = '' }: CitySelecto
 
       {/* DROPDOWN MENU */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-72 origin-top-right rounded-2xl bg-[#FCFAF5] border border-[#e6dfd4] shadow-2xl z-50 p-2 space-y-1 animate-in fade-in-0 zoom-in-95 duration-150">
-          <div className="px-3 py-2 border-b border-[#e6dfd4]">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#82967A] block">
+        <div className="absolute right-0 mt-2 w-72 origin-top-right rounded-2xl bg-[#FFFFFF] border border-[#E7E5DF] shadow-2xl z-50 p-2 space-y-1 animate-in fade-in-0 zoom-in-95 duration-150">
+          <div className="px-3 py-2 border-b border-[#E7E5DF]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#107492] block">
               Destinos Disponíveis
             </span>
             <p className="text-xs text-[#26332F] font-serif font-bold">
@@ -94,16 +94,16 @@ export function CitySelector({ variant = 'navbar', className = '' }: CitySelecto
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold transition-all group ${
                     isSelected
-                      ? 'bg-[#183A32] text-[#FCFAF5] shadow-xs'
-                      : 'text-[#26332F] hover:bg-[#F4EBDD] hover:text-[#183A32]'
+                      ? 'bg-[#071510] text-[#FFFFFF] shadow-xs'
+                      : 'text-[#26332F] hover:bg-[#F6F0D4] hover:text-[#071510]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <div
                       className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
                         isSelected
-                          ? 'bg-[#D49A3A] text-[#26332F]'
-                          : 'bg-[#F4EBDD] text-[#183A32] group-hover:bg-[#183A32] group-hover:text-[#D49A3A]'
+                          ? 'bg-[#F19F14] text-[#071510]'
+                          : 'bg-[#F6F0D4] text-[#1B4931] group-hover:bg-[#071510] group-hover:text-[#F19F14]'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" aria-hidden="true" />
@@ -112,7 +112,7 @@ export function CitySelector({ variant = 'navbar', className = '' }: CitySelecto
                       <span className="block font-bold">{city.name}</span>
                       <span
                         className={`text-[10px] block ${
-                          isSelected ? 'text-[#82967A]' : 'text-[#52615B]'
+                          isSelected ? 'text-[#E7E5DF]' : 'text-[#26332F]/70'
                         }`}
                       >
                         {city.state} • {city.tags?.[0] || 'Turismo'}
@@ -120,19 +120,19 @@ export function CitySelector({ variant = 'navbar', className = '' }: CitySelecto
                     </div>
                   </div>
 
-                  {isSelected && <Check className="w-4 h-4 text-[#D49A3A] shrink-0" aria-hidden="true" />}
+                  {isSelected && <Check className="w-4 h-4 text-[#F19F14] shrink-0" aria-hidden="true" />}
                 </Link>
               );
             })}
           </div>
 
-          <div className="pt-2 border-t border-[#e6dfd4] px-1">
+          <div className="pt-2 border-t border-[#E7E5DF] px-1">
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-1.5 w-full py-2 text-center text-[11px] font-bold text-[#183A32] hover:text-[#722F3E] transition-colors"
+              className="flex items-center justify-center gap-1.5 w-full py-2 text-center text-[11px] font-bold text-[#107492] hover:text-[#D86E04] transition-colors"
             >
-              <Compass className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+              <Compass className="w-3.5 h-3.5 text-[#F19F14]" aria-hidden="true" />
               <span>Ver todos os destinos na Home</span>
             </Link>
           </div>

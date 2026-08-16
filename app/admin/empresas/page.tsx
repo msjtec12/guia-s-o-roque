@@ -28,10 +28,11 @@ export default function AdminEmpresasPage() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBiz, setEditingBiz] = useState<Partial<Business> | null>(null);
+
   const loadData = useCallback(async () => {
     const [bizList, catList, cityList] = await Promise.all([
       getAllBusinessesAdmin(selectedCityId),
-      getCategories(selectedCityId !== 'all' ? (selectedCityId === 'city-atibaia' ? 'atibaia' : 'sao-roque') : undefined),
+      getCategories(selectedCityId !== 'all' ? (selectedCityId === 'city-atibaia' ? 'atibaia' : selectedCityId === 'city-socorro' ? 'socorro' : 'sao-roque') : undefined),
       getAllCitiesAdmin(),
     ]);
     setBusinesses(bizList);
@@ -110,38 +111,38 @@ export default function AdminEmpresasPage() {
   });
 
   return (
-    <div className="space-y-6 bg-[#FCFAF5]">
+    <div className="space-y-6 bg-[#F6F0D4]">
       
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E7E5DF] pb-4">
         <div>
           <h1 className="font-serif text-3xl font-bold text-[#26332F]">
             Gerenciar Empresas & Anunciantes
           </h1>
-          <p className="text-xs text-[#52615B]">
+          <p className="text-xs text-[#26332F]/80">
             Cadastre, edite, altere planos, publique ou remova estabelecimentos comerciais
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar nova empresa"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
-          <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+          <Plus className="w-4 h-4" aria-hidden="true" />
           <span>Cadastrar Nova Empresa</span>
         </button>
       </div>
 
       {/* SEARCH AND FILTERS TOOLBAR */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-[#e6dfd4] shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-3xl border border-[#E7E5DF] shadow-sm">
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-[#82967A] absolute left-3 top-3" aria-hidden="true" />
+          <Search className="w-4 h-4 text-[#107492] absolute left-3 top-3" aria-hidden="true" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nome ou endereço..."
-            className="w-full pl-9 pr-4 py-2 bg-[#FCFAF5] border border-[#e6dfd4] rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#183A32] text-[#26332F]"
+            className="w-full pl-9 pr-4 py-2 bg-[#F6F0D4] border border-[#E7E5DF] rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#F19F14] text-[#26332F]"
           />
         </div>
 
@@ -150,7 +151,7 @@ export default function AdminEmpresasPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 bg-[#FCFAF5] border border-[#e6dfd4] rounded-xl text-xs font-semibold text-[#26332F]"
+            className="px-3 py-2 bg-[#F6F0D4] border border-[#E7E5DF] rounded-xl text-xs font-semibold text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
           >
             <option value="all">Todos os Status</option>
             <option value="published">Publicados</option>
@@ -161,7 +162,7 @@ export default function AdminEmpresasPage() {
           <select
             value={filterPlan}
             onChange={(e) => setFilterPlan(e.target.value)}
-            className="px-3 py-2 bg-[#FCFAF5] border border-[#e6dfd4] rounded-xl text-xs font-semibold text-[#26332F]"
+            className="px-3 py-2 bg-[#F6F0D4] border border-[#E7E5DF] rounded-xl text-xs font-semibold text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
           >
             <option value="all">Todos os Planos</option>
             <option value="premium">Premium</option>
@@ -172,10 +173,10 @@ export default function AdminEmpresasPage() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#E7E5DF] shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FCFAF5] border-b border-[#e6dfd4] text-[#26332F] font-bold uppercase tracking-wider">
+            <thead className="bg-[#F6F0D4] border-b border-[#E7E5DF] text-[#26332F] font-bold uppercase tracking-wider">
               <tr>
                 <th className="p-4">Empresa</th>
                 <th className="p-4">Destino / Cidade</th>
@@ -185,13 +186,13 @@ export default function AdminEmpresasPage() {
                 <th className="p-4">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F4EBDD] font-medium">
+            <tbody className="divide-y divide-[#E7E5DF] font-medium">
               {filteredBusinesses.map((biz) => {
-                const cityName = biz.city?.name || (biz.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque');
+                const cityName = biz.city?.name || (biz.city_id === 'city-atibaia' ? 'Atibaia' : biz.city_id === 'city-socorro' ? 'Socorro' : 'São Roque');
                 return (
-                  <tr key={biz.id} className="hover:bg-[#FCFAF5] transition-colors">
+                  <tr key={biz.id} className="hover:bg-[#F6F0D4]/40 transition-colors">
                     <td className="p-4 flex items-center gap-3">
-                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
+                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#F6F0D4] shrink-0 border border-[#E7E5DF]">
                         <Image
                           src={biz.main_image_url || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100&q=80'}
                           alt={biz.name}
@@ -202,12 +203,12 @@ export default function AdminEmpresasPage() {
                       </div>
                       <div>
                         <span className="font-bold text-[#26332F] block">{biz.name}</span>
-                        <span className="text-[#52615B] text-[11px]">{biz.address}</span>
+                        <span className="text-[#26332F]/70 text-[11px]">{biz.address}</span>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#e6dfd4]">
-                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                      <span className="inline-flex items-center gap-1 bg-[#F6F0D4] text-[#1B4931] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#E7E5DF]">
+                        <MapPin className="w-3 h-3 text-[#F19F14]" />
                         {cityName}
                       </span>
                     </td>
@@ -218,13 +219,13 @@ export default function AdminEmpresasPage() {
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                           biz.is_premium || biz.plan === 'premium'
-                            ? 'bg-[#F4EBDD] text-[#722F3E] border border-[#722F3E]/30'
+                            ? 'bg-[#F6F0D4] text-[#071510] border border-[#F19F14]'
                             : biz.is_featured || biz.plan === 'highlight'
-                            ? 'bg-[#183A32]/10 text-[#183A32]'
-                            : 'bg-[#FCFAF5] text-[#52615B] border border-[#e6dfd4]'
+                            ? 'bg-[#1B4931]/10 text-[#1B4931]'
+                            : 'bg-white text-[#26332F]/70 border border-[#E7E5DF]'
                         }`}
                       >
-                        {(biz.is_premium || biz.plan === 'premium') && <Crown className="w-3 h-3 fill-[#722F3E]" aria-hidden="true" />}
+                        {(biz.is_premium || biz.plan === 'premium') && <Crown className="w-3 h-3 fill-[#F19F14]" aria-hidden="true" />}
                         {biz.plan.toUpperCase()}
                       </span>
                     </td>
@@ -234,11 +235,11 @@ export default function AdminEmpresasPage() {
                         aria-label={`Alterar status de ${biz.name}`}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${
                           biz.status === 'published'
-                            ? 'bg-[#183A32] text-[#FCFAF5]'
-                            : 'bg-[#F4EBDD] text-[#26332F]'
+                            ? 'bg-[#1B4931] text-[#FFFFFF]'
+                            : 'bg-[#F6F0D4] text-[#26332F]'
                         }`}
                       >
-                        {biz.status === 'published' ? <Eye className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
+                        {biz.status === 'published' ? <Eye className="w-3 h-3 text-[#F19F14]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
                         <span>{biz.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
                       </button>
                     </td>
@@ -246,7 +247,7 @@ export default function AdminEmpresasPage() {
                       <button
                         onClick={() => handleOpenModal(biz)}
                         aria-label={`Editar ${biz.name}`}
-                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-[#26332F] hover:text-[#107492] bg-[#F6F0D4] hover:bg-[#E7E5DF] rounded-lg transition-colors cursor-pointer"
                         title="Editar"
                       >
                         <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -254,7 +255,7 @@ export default function AdminEmpresasPage() {
                       <button
                         onClick={() => handleDelete(biz.id)}
                         aria-label={`Excluir ${biz.name}`}
-                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-rose-700 hover:text-rose-900 bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         title="Excluir"
                       >
                         <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -270,13 +271,13 @@ export default function AdminEmpresasPage() {
 
       {/* EDIT / CREATE MODAL */}
       {isModalOpen && editingBiz && (
-        <div className="fixed inset-0 z-50 bg-[#26332F]/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-[#e6dfd4] shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#F4EBDD] pb-3">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-[#E7E5DF] shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E7E5DF] pb-3">
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingBiz.id ? 'Editar Empresa' : 'Cadastrar Nova Empresa'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#26332F]/60 hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -289,7 +290,7 @@ export default function AdminEmpresasPage() {
                   <select
                     value={editingBiz.city_id || 'city-sao-roque'}
                     onChange={(e) => setEditingBiz({ ...editingBiz, city_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F] font-semibold"
                   >
                     {cities.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -306,7 +307,7 @@ export default function AdminEmpresasPage() {
                     value={editingBiz.name || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, name: e.target.value })}
                     required
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -315,7 +316,7 @@ export default function AdminEmpresasPage() {
                   <select
                     value={editingBiz.category_id || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, category_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F]"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>{c.name}</option>
@@ -330,7 +331,7 @@ export default function AdminEmpresasPage() {
                     value={editingBiz.whatsapp || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, whatsapp: e.target.value })}
                     required
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -340,7 +341,7 @@ export default function AdminEmpresasPage() {
                     type="text"
                     value={editingBiz.phone || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -357,7 +358,7 @@ export default function AdminEmpresasPage() {
                         is_featured: val === 'highlight' || val === 'premium'
                       });
                     }}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F]"
                   >
                     <option value="free">Gratuito</option>
                     <option value="highlight">Destaque</option>
@@ -370,7 +371,7 @@ export default function AdminEmpresasPage() {
                   <select
                     value={editingBiz.status || 'published'}
                     onChange={(e) => setEditingBiz({ ...editingBiz, status: e.target.value as BusinessStatus })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F]"
                   >
                     <option value="published">Publicado</option>
                     <option value="draft">Rascunho</option>
@@ -383,7 +384,7 @@ export default function AdminEmpresasPage() {
                     type="text"
                     value={editingBiz.address || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, address: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -399,23 +400,23 @@ export default function AdminEmpresasPage() {
                     rows={3}
                     value={editingBiz.description || ''}
                     onChange={(e) => setEditingBiz({ ...editingBiz, description: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
               </div>
 
-              <div className="pt-4 border-t border-[#F4EBDD] flex justify-end gap-3">
+              <div className="pt-4 border-t border-[#E7E5DF] flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#F6F0D4] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
+                  className="px-6 py-2 rounded-xl bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold cursor-pointer"
                 >
                   Salvar Empresa
                 </button>

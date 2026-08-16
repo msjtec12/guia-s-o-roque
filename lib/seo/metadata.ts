@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
 export const platformConfig = {
-  name: 'Descubra',
-  slogan: 'Descubra lugares, experiências e sabores.',
-  description: 'Encontre destinos, lugares, experiências, gastronomia, hospedagem e passeios.',
+  name: 'Descubra Cidades',
+  slogan: 'Descubra lugares. Viva experiências.',
+  description: 'Plataforma oficial de turismo, destinos, lugares, gastronomia, hospedagem, passeios e experiências no Brasil.',
   url: 'https://descubra.tur.br',
   ogImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
 };

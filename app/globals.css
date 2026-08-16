@@ -1,114 +1,176 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #071510;
+  --color-primary-light: #1B4931;
+  --color-secondary: #107492;
+  --color-accent: #F19F14;
+  --color-accent-secondary: #D86E04;
+  --color-background: #F6F0D4;
+  --color-surface: #FFFFFF;
+  --color-text: #26332F;
+  --color-border: #E7E5DF;
+
+  --color-verde-profundo: #071510;
+  --color-verde-natureza: #1B4931;
+  --color-azul-destino: #107492;
+  --color-dourado: #F19F14;
+  --color-laranja: #D86E04;
+  --color-creme: #F6F0D4;
+  --color-grafite: #26332F;
+  --color-cinza-claro: #E7E5DF;
+}
+
 @layer base {
   :root {
-    /* OFFICIAL PALETTE - SERRA & VINHO */
-    --color-forest: #183A32;      /* Verde Mata (25%) */
-    --color-wine: #722F3E;        /* Vinho São Roque (10%) */
-    --color-sage: #82967A;        /* Verde Sálvia */
-    --color-terracotta: #B86F52;  /* Terracota */
-    --color-sand: #F4EBDD;        /* Areia */
-    --color-gold: #D49A3A;        /* Dourado Sol (5%) */
-    --color-cream: #FCFAF5;       /* Creme (60%) */
-    --color-graphite: #26332F;    /* Grafite */
+    /* OFFICIAL DESIGN TOKENS - DESCUBRA CIDADES */
+    --color-primary: #071510;          /* Verde Profundo */
+    --color-primary-light: #1B4931;    /* Verde Natureza */
+    --color-secondary: #107492;        /* Azul Destino */
+    --color-accent: #F19F14;           /* Dourado Descoberta */
+    --color-accent-secondary: #D86E04; /* Laranja Pôr do Sol */
+    --color-background: #F6F0D4;       /* Creme */
+    --color-surface: #FFFFFF;          /* Branco */
+    --color-text: #26332F;             /* Grafite */
+    --color-border: #E7E5DF;           /* Cinza Claro */
 
     /* SYSTEM MAP */
-    --background: var(--color-cream);
-    --foreground: var(--color-graphite);
-    
-    --brand-forest: var(--color-forest);
-    --brand-forest-light: #245247;
-    --brand-wine: var(--color-wine);
-    --brand-wine-light: #8d3d4e;
-    --brand-sand: var(--color-sand);
-    --brand-gold: var(--color-gold);
-    --brand-sage: var(--color-sage);
-    --brand-terracotta: var(--color-terracotta);
-    --brand-cream: var(--color-cream);
-    --brand-graphite: var(--color-graphite);
-    
-    --card-bg: #ffffff;
-    --border-color: #e6dfd4;
+    --background: var(--color-background);
+    --foreground: var(--color-text);
+    --surface: var(--color-surface);
+    --border: var(--color-border);
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: var(--color-background);
+    color: var(--color-text);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 }
 
-/* Custom visual utility classes for Serra & Vinho design system */
-.bg-forest {
-  background-color: var(--color-forest);
+/* ==============================================================
+   BUTTON DESIGN SYSTEM
+   ============================================================== */
+
+/* BOTÃO PRIMÁRIO: Background #F19F14, Texto #071510, Hover #D86E04 */
+.btn-primary {
+  background-color: #F19F14;
+  color: #071510;
+  font-weight: 700;
+  border-radius: 1rem;
+  padding: 0.875rem 1.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(241, 159, 20, 0.35);
+  cursor: pointer;
 }
 
-.bg-forest-light {
-  background-color: var(--brand-forest-light);
+.btn-primary:hover {
+  background-color: #D86E04;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(216, 110, 4, 0.45);
 }
 
-.bg-wine {
-  background-color: var(--color-wine);
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-.bg-sage {
-  background-color: var(--color-sage);
+/* BOTÃO SECUNDÁRIO: Background #1B4931, Texto #FFFFFF, Hover #071510 */
+.btn-secondary {
+  background-color: #1B4931;
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 1rem;
+  padding: 0.875rem 1.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(27, 73, 49, 0.25);
+  cursor: pointer;
 }
 
-.bg-terracotta {
-  background-color: var(--color-terracotta);
+.btn-secondary:hover {
+  background-color: #071510;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(7, 21, 16, 0.35);
 }
 
-.bg-sand {
-  background-color: var(--color-sand);
+.btn-secondary:active {
+  transform: translateY(0);
 }
 
-.bg-cream {
-  background-color: var(--color-cream);
+/* BOTÃO OUTLINE: Border #F19F14, Texto #F19F14, Hover BG #F19F14 Texto #071510 */
+.btn-outline {
+  background-color: transparent;
+  color: #F19F14;
+  border: 1.5px solid #F19F14;
+  font-weight: 700;
+  border-radius: 1rem;
+  padding: 0.875rem 1.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
 }
 
-.text-forest {
-  color: var(--color-forest);
+.btn-outline:hover {
+  background-color: #F19F14;
+  color: #071510;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(241, 159, 20, 0.3);
 }
 
-.text-wine {
-  color: var(--color-wine);
+.btn-outline:active {
+  transform: translateY(0);
 }
 
-.text-sage {
-  color: var(--color-sage);
+/* ==============================================================
+   BADGES & CHIPS OFICIAIS
+   ============================================================== */
+.badge-gold {
+  background-color: rgba(241, 159, 20, 0.15);
+  color: #D86E04;
+  border: 1px solid rgba(241, 159, 20, 0.35);
 }
 
-.text-terracotta {
-  color: var(--color-terracotta);
+.badge-green {
+  background-color: rgba(27, 73, 49, 0.12);
+  color: #1B4931;
+  border: 1px solid rgba(27, 73, 49, 0.25);
 }
 
-.text-gold {
-  color: var(--color-gold);
+.badge-blue {
+  background-color: rgba(16, 116, 146, 0.12);
+  color: #107492;
+  border: 1px solid rgba(16, 116, 146, 0.25);
 }
 
-.text-graphite {
-  color: var(--color-graphite);
-}
-
-.border-brand {
-  border-color: var(--border-color);
-}
-
-/* Glassmorphism search bar & panels */
+/* ==============================================================
+   GLASS & SURFACES
+   ============================================================== */
 .glass-panel {
-  background: rgba(252, 250, 245, 0.94);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid #E7E5DF;
 }
 
 .glass-dark {
-  background: rgba(24, 58, 50, 0.90);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(7, 21, 16, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(27, 73, 49, 0.4);
 }
 
 /* Card hover animation */
@@ -118,7 +180,7 @@
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px -8px rgba(24, 58, 50, 0.12);
+  box-shadow: 0 16px 32px -8px rgba(7, 21, 16, 0.10);
 }
 
 /* Custom scrollbar */
@@ -128,14 +190,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FCFAF5;
+  background: #F6F0D4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #dcd4c5;
+  background: #E7E5DF;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #183A32;
+  background: #1B4931;
 }

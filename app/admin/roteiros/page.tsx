@@ -93,47 +93,47 @@ export default function AdminRoteirosPage() {
   );
 
   return (
-    <div className="space-y-6 bg-[#FCFAF5]">
+    <div className="space-y-6 bg-[#F6F0D4]">
       
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E7E5DF] pb-4">
         <div>
           <h1 className="font-serif text-3xl font-bold text-[#26332F]">
             Gerenciar Roteiros Prontos
           </h1>
-          <p className="text-xs text-[#52615B]">
+          <p className="text-xs text-[#26332F]/80">
             Cadastre itinerários temáticos de 1 dia, fim de semana, gastronômicos ou ecoturismo
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar novo roteiro"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
-          <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+          <Plus className="w-4 h-4" aria-hidden="true" />
           <span>Cadastrar Novo Roteiro</span>
         </button>
       </div>
 
       {/* SEARCH TOOLBAR */}
-      <div className="bg-white p-4 rounded-2xl border border-[#e6dfd4] shadow-sm flex items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-3xl border border-[#E7E5DF] shadow-sm flex items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-[#82967A] absolute left-3 top-3" aria-hidden="true" />
+          <Search className="w-4 h-4 text-[#107492] absolute left-3 top-3" aria-hidden="true" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar roteiro por nome..."
-            className="w-full pl-9 pr-4 py-2 bg-[#FCFAF5] border border-[#e6dfd4] rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#183A32] text-[#26332F]"
+            className="w-full pl-9 pr-4 py-2 bg-[#F6F0D4] border border-[#E7E5DF] rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#F19F14] text-[#26332F]"
           />
         </div>
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#E7E5DF] shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FCFAF5] border-b border-[#e6dfd4] text-[#26332F] font-bold uppercase tracking-wider">
+            <thead className="bg-[#F6F0D4] border-b border-[#E7E5DF] text-[#26332F] font-bold uppercase tracking-wider">
               <tr>
                 <th className="p-4">Roteiro</th>
                 <th className="p-4">Destino</th>
@@ -143,13 +143,13 @@ export default function AdminRoteirosPage() {
                 <th className="p-4">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F4EBDD] font-medium">
+            <tbody className="divide-y divide-[#E7E5DF] font-medium">
               {filteredRoutes.map((r) => {
-                const cityName = r.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque';
+                const cityName = r.city_id === 'city-atibaia' ? 'Atibaia' : r.city_id === 'city-socorro' ? 'Socorro' : 'São Roque';
                 return (
-                  <tr key={r.id} className="hover:bg-[#FCFAF5] transition-colors">
+                  <tr key={r.id} className="hover:bg-[#F6F0D4]/40 transition-colors">
                     <td className="p-4 flex items-center gap-3">
-                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
+                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#F6F0D4] shrink-0 border border-[#E7E5DF]">
                         <Image
                           src={r.image_url || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=100&q=80'}
                           alt={r.name}
@@ -160,24 +160,24 @@ export default function AdminRoteirosPage() {
                       </div>
                       <div>
                         <span className="font-bold text-[#26332F] block">{r.name}</span>
-                        <span className="text-[#52615B] text-[11px] line-clamp-1">{r.description}</span>
+                        <span className="text-[#26332F]/70 text-[11px] line-clamp-1">{r.description}</span>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#e6dfd4]">
-                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                      <span className="inline-flex items-center gap-1 bg-[#F6F0D4] text-[#1B4931] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#E7E5DF]">
+                        <MapPin className="w-3 h-3 text-[#F19F14]" />
                         {cityName}
                       </span>
                     </td>
                     <td className="p-4 text-[#26332F]">
-                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#183A32]">
-                        <Users className="w-3.5 h-3.5 text-[#183A32]" aria-hidden="true" />
+                      <span className="inline-flex items-center gap-1 bg-[#F6F0D4] px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#1B4931] border border-[#E7E5DF]">
+                        <Users className="w-3.5 h-3.5 text-[#107492]" aria-hidden="true" />
                         {r.profile}
                       </span>
                     </td>
-                    <td className="p-4 text-[#52615B] whitespace-nowrap">
+                    <td className="p-4 text-[#26332F]/70 whitespace-nowrap">
                       <span className="inline-flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-[#183A32]" aria-hidden="true" />
+                        <Clock className="w-3.5 h-3.5 text-[#107492]" aria-hidden="true" />
                         {r.duration}
                       </span>
                     </td>
@@ -187,11 +187,11 @@ export default function AdminRoteirosPage() {
                         aria-label={`Alterar status do roteiro ${r.name}`}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${
                           r.status === 'published'
-                            ? 'bg-[#183A32] text-[#FCFAF5]'
-                            : 'bg-[#F4EBDD] text-[#26332F]'
+                            ? 'bg-[#1B4931] text-[#FFFFFF]'
+                            : 'bg-[#F6F0D4] text-[#26332F]'
                         }`}
                       >
-                        {r.status === 'published' ? <Eye className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />}
+                        {r.status === 'published' ? <Eye className="w-3.5 h-3.5 text-[#F19F14]" aria-hidden="true" /> : <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />}
                         <span>{r.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
                       </button>
                     </td>
@@ -199,7 +199,7 @@ export default function AdminRoteirosPage() {
                       <button
                         onClick={() => handleOpenModal(r)}
                         aria-label={`Editar roteiro ${r.name}`}
-                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-[#26332F] hover:text-[#107492] bg-[#F6F0D4] hover:bg-[#E7E5DF] rounded-lg transition-colors cursor-pointer"
                         title="Editar"
                       >
                         <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -207,7 +207,7 @@ export default function AdminRoteirosPage() {
                       <button
                         onClick={() => handleDelete(r.id)}
                         aria-label={`Excluir roteiro ${r.name}`}
-                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-rose-700 hover:text-rose-900 bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         title="Excluir"
                       >
                         <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -223,13 +223,13 @@ export default function AdminRoteirosPage() {
 
       {/* EDIT / CREATE MODAL */}
       {isModalOpen && editingRoute && (
-        <div className="fixed inset-0 z-50 bg-[#26332F]/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-[#e6dfd4] shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#F4EBDD] pb-3">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-[#E7E5DF] shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E7E5DF] pb-3">
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingRoute.id ? 'Editar Roteiro' : 'Cadastrar Novo Roteiro'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#26332F]/60 hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -242,7 +242,7 @@ export default function AdminRoteirosPage() {
                   <select
                     value={editingRoute.city_id || 'city-sao-roque'}
                     onChange={(e) => setEditingRoute({ ...editingRoute, city_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F] font-semibold"
                   >
                     {cities.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -259,7 +259,7 @@ export default function AdminRoteirosPage() {
                     value={editingRoute.name || ''}
                     onChange={(e) => setEditingRoute({ ...editingRoute, name: e.target.value })}
                     required
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -271,7 +271,7 @@ export default function AdminRoteirosPage() {
                     onChange={(e) => setEditingRoute({ ...editingRoute, profile: e.target.value })}
                     placeholder="Ex.: Casal, Família, Amigos..."
                     required
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -283,7 +283,7 @@ export default function AdminRoteirosPage() {
                     onChange={(e) => setEditingRoute({ ...editingRoute, duration: e.target.value })}
                     placeholder="Ex.: 1 Dia Completo"
                     required
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
@@ -292,7 +292,7 @@ export default function AdminRoteirosPage() {
                   <select
                     value={editingRoute.status || 'published'}
                     onChange={(e) => setEditingRoute({ ...editingRoute, status: e.target.value as Route['status'] })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl bg-white text-[#26332F]"
                   >
                     <option value="published">Publicado</option>
                     <option value="draft">Rascunho</option>
@@ -311,23 +311,23 @@ export default function AdminRoteirosPage() {
                     rows={3}
                     value={editingRoute.description || ''}
                     onChange={(e) => setEditingRoute({ ...editingRoute, description: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
+                    className="w-full px-3 py-2 border border-[#E7E5DF] rounded-xl text-[#26332F] focus:outline-none focus:ring-2 focus:ring-[#F19F14]"
                   />
                 </div>
 
               </div>
 
-              <div className="pt-4 border-t border-[#F4EBDD] flex justify-end gap-3">
+              <div className="pt-4 border-t border-[#E7E5DF] flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#F6F0D4] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
+                  className="px-6 py-2 rounded-xl bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold cursor-pointer"
                 >
                   Salvar Roteiro
                 </button>

@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen flex flex-col bg-[#FCFAF5] text-[#26332F] selection:bg-[#D49A3A] selection:text-[#26332F]">
+      <body className="min-h-screen flex flex-col bg-[#F6F0D4] text-[#26332F] selection:bg-[#F19F14] selection:text-[#071510] antialiased">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

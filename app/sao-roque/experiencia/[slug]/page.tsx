@@ -43,7 +43,7 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
   ];
 
   return (
-    <div className="pb-20 space-y-8 bg-[#FCFAF5]">
+    <div className="pb-20 space-y-8 bg-[#F6F0D4]">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <Breadcrumbs items={breadcrumbs} />
@@ -51,7 +51,7 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
 
       {/* HERO SECTION */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-[#183A32] shadow-xl border border-[#e6dfd4] min-h-[380px] sm:min-h-[440px] flex items-end">
+        <div className="relative rounded-3xl overflow-hidden bg-[#071510] shadow-xl border border-[#E7E5DF] min-h-[380px] sm:min-h-[440px] flex items-end">
           <Image
             src={experience.main_image_url || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1600&q=80'}
             alt={experience.name}
@@ -60,15 +60,15 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
             className="object-cover opacity-60"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#26332F] via-[#26332F]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071510] via-[#071510]/40 to-transparent" />
 
-          <div className="relative z-10 p-6 sm:p-10 w-full text-[#FCFAF5] space-y-4">
+          <div className="relative z-10 p-6 sm:p-10 w-full text-[#FFFFFF] space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 bg-[#D49A3A] text-[#26332F] text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                <Sparkles className="w-3.5 h-3.5 fill-[#26332F]" />
+              <span className="inline-flex items-center gap-1 bg-[#F19F14] text-[#071510] text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 fill-[#071510]" />
                 Experiência em Destaque
               </span>
-              <span className="bg-[#722F3E] text-[#FCFAF5] text-xs font-bold px-3 py-1 rounded-full border border-[#8d3d4e]/40">
+              <span className="bg-[#1B4931] text-[#FFFFFF] text-xs font-bold px-3 py-1 rounded-full border border-[#1B4931]/40">
                 {experience.price > 0 ? formatCurrency(experience.price) : 'Gratuito'}
               </span>
             </div>
@@ -78,12 +78,12 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
             </h1>
 
             {experience.business && (
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#F4EBDD]">
-                <MapPin className="w-4 h-4 text-[#D49A3A]" />
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#E7E5DF]">
+                <MapPin className="w-4 h-4 text-[#F19F14]" />
                 <span>Oferecido por: </span>
                 <Link
                   href={`/sao-roque/empresa/${experience.business.slug}`}
-                  className="font-bold text-[#D49A3A] hover:underline"
+                  className="font-bold text-[#F19F14] hover:underline"
                 >
                   {experience.business.name}
                 </Link>
@@ -95,8 +95,8 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
 
       {/* CONTENT */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-6 bg-white p-8 rounded-3xl border border-[#e6dfd4] shadow-sm">
-          <h2 className="font-serif text-2xl font-bold text-[#26332F] border-b border-[#F4EBDD] pb-3">
+        <div className="md:col-span-2 space-y-6 bg-white p-8 rounded-3xl border border-[#E7E5DF] shadow-sm">
+          <h2 className="font-serif text-2xl font-bold text-[#26332F] border-b border-[#E7E5DF] pb-3">
             Detalhes da Experiência
           </h2>
           <p className="text-[#26332F] text-sm sm:text-base leading-relaxed whitespace-pre-line">
@@ -105,13 +105,13 @@ export default async function SaoRoqueExperienceDetailPage({ params }: Experienc
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white rounded-3xl p-6 border border-[#e6dfd4] shadow-md space-y-4 sticky top-24">
-            <div className="flex items-center gap-2 text-[#26332F] font-bold text-sm border-b border-[#F4EBDD] pb-3">
-              <Clock className="w-4 h-4 text-[#183A32]" />
+          <div className="bg-white rounded-3xl p-6 border border-[#E7E5DF] shadow-md space-y-4 sticky top-24">
+            <div className="flex items-center gap-2 text-[#26332F] font-bold text-sm border-b border-[#E7E5DF] pb-3">
+              <Clock className="w-4 h-4 text-[#107492]" />
               <span>Duração: {experience.duration}</span>
             </div>
 
-            <div className="text-xs text-[#52615B] leading-relaxed">
+            <div className="text-xs text-[#26332F]/70 leading-relaxed">
               Para tirar dúvidas ou agendar sua visita, fale diretamente com o estabelecimento parceiro.
             </div>
 

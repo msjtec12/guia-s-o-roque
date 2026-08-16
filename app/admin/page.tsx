@@ -52,36 +52,36 @@ export default function AdminDashboardPage() {
     : cities.find(c => c.id === selectedCityId)?.name || 'Destino Selecionado';
 
   return (
-    <div className="space-y-8 bg-[#FCFAF5]">
+    <div className="space-y-8 bg-[#F6F0D4]">
       
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E7E5DF] pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F4EBDD] text-[#183A32] text-xs font-bold border border-[#e6dfd4] mb-1">
-            <Globe2 className="w-3.5 h-3.5 text-[#D49A3A]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#107492] text-xs font-bold border border-[#E7E5DF] shadow-xs mb-1">
+            <Globe2 className="w-3.5 h-3.5 text-[#F19F14]" />
             <span>Filtro Ativo: {currentCityName}</span>
           </div>
           <h1 className="font-serif text-3xl font-bold text-[#26332F]">
-            Painel Geral Descubra
+            Painel Geral Descubra Cidades
           </h1>
-          <p className="text-xs text-[#52615B]">
+          <p className="text-xs text-[#26332F]/80">
             Visão geral e métricas da plataforma de turismo digital multicidade
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/cidades"
-            className="inline-flex items-center gap-1.5 bg-[#F4EBDD] hover:bg-[#e8dbca] text-[#183A32] font-semibold text-xs px-4 py-2.5 rounded-xl border border-[#e6dfd4] transition-all"
+            className="inline-flex items-center gap-1.5 bg-white hover:bg-[#E7E5DF] text-[#1B4931] font-semibold text-xs px-4 py-2.5 rounded-xl border border-[#E7E5DF] transition-all"
           >
-            <Globe2 className="w-4 h-4 text-[#183A32]" aria-hidden="true" />
+            <Globe2 className="w-4 h-4 text-[#107492]" aria-hidden="true" />
             <span>Gerenciar Cidades ({cities.length})</span>
           </Link>
           <Link
             href="/admin/empresas"
             aria-label="Cadastrar nova empresa"
-            className="inline-flex items-center gap-1.5 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-semibold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all"
+            className="inline-flex items-center gap-1.5 bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+            <Plus className="w-4 h-4" aria-hidden="true" />
             <span>Cadastrar Empresa</span>
           </Link>
         </div>
@@ -90,108 +90,110 @@ export default function AdminDashboardPage() {
       {/* METRICS CARDS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
-        <div className="bg-white p-6 rounded-2xl border border-[#e6dfd4] shadow-sm space-y-3">
+        <div className="bg-white p-6 rounded-3xl border border-[#E7E5DF] shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#82967A]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#26332F]/60">
               Total Empresas
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[#183A32]/10 text-[#183A32] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#F6F0D4] text-[#1B4931] flex items-center justify-center">
               <Building2 className="w-5 h-5" aria-hidden="true" />
             </div>
           </div>
           <div className="text-3xl font-bold text-[#26332F]">
             {loading ? '...' : businesses.length}
           </div>
-          <div className="flex justify-between text-xs text-[#52615B] pt-1 border-t border-[#F4EBDD]">
-            <span className="text-[#183A32] font-semibold">{publishedCount} publicadas</span>
-            <span className="text-[#82967A]">{draftCount} rascunhos</span>
+          <div className="flex justify-between text-xs text-[#26332F]/70 pt-1 border-t border-[#E7E5DF]">
+            <span className="text-[#1B4931] font-semibold">{publishedCount} publicadas</span>
+            <span className="text-[#26332F]/60">{draftCount} rascunhos</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-[#e6dfd4] shadow-sm space-y-3">
+        <div className="bg-white p-6 rounded-3xl border border-[#E7E5DF] shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#82967A]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#26332F]/60">
               Parceiros Pagos
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[#F4EBDD] text-[#D49A3A] flex items-center justify-center border border-[#e6dfd4]">
-              <Crown className="w-5 h-5 fill-[#D49A3A]" aria-hidden="true" />
+            <div className="w-9 h-9 rounded-xl bg-[#F6F0D4] text-[#F19F14] flex items-center justify-center border border-[#E7E5DF]">
+              <Crown className="w-5 h-5 fill-[#F19F14]" aria-hidden="true" />
             </div>
           </div>
           <div className="text-3xl font-bold text-[#26332F]">
             {loading ? '...' : premiumCount + highlightCount}
           </div>
-          <div className="flex justify-between text-xs text-[#52615B] pt-1 border-t border-[#F4EBDD]">
-            <span className="text-[#D49A3A] font-extrabold">{premiumCount} Premium</span>
-            <span className="text-[#183A32] font-semibold">{highlightCount} Destaque</span>
+          <div className="flex justify-between text-xs text-[#26332F]/70 pt-1 border-t border-[#E7E5DF]">
+            <span className="text-[#F19F14] font-extrabold">{premiumCount} Premium</span>
+            <span className="text-[#1B4931] font-semibold">{highlightCount} Destaque</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-[#e6dfd4] shadow-sm space-y-3">
+        <div className="bg-white p-6 rounded-3xl border border-[#E7E5DF] shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#82967A]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#26332F]/60">
               Leads Comerciais
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[#722F3E]/10 text-[#722F3E] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#F6F0D4] text-[#107492] flex items-center justify-center">
               <Users className="w-5 h-5" aria-hidden="true" />
             </div>
           </div>
           <div className="text-3xl font-bold text-[#26332F]">
             {loading ? '...' : leads.length}
           </div>
-          <span className="text-xs text-[#722F3E] font-semibold">
-            {pendingLeadsCount} propostas novas
-          </span>
+          <div className="flex justify-between text-xs text-[#26332F]/70 pt-1 border-t border-[#E7E5DF]">
+            <span className="text-[#107492] font-semibold">
+              {pendingLeadsCount} propostas novas
+            </span>
+          </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-[#e6dfd4] shadow-sm space-y-3">
+        <div className="bg-white p-6 rounded-3xl border border-[#E7E5DF] shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#82967A]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#26332F]/60">
               Engajamento & Cliques
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[#183A32]/10 text-[#183A32] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#F6F0D4] text-[#1B4931] flex items-center justify-center">
               <TrendingUp className="w-5 h-5" aria-hidden="true" />
             </div>
           </div>
           <div className="text-3xl font-bold text-[#26332F]">1.480+</div>
-          <div className="flex justify-between text-xs text-[#52615B] pt-1 border-t border-[#F4EBDD]">
-            <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3 text-[#183A32]" aria-hidden="true" /> WhatsApp</span>
-            <span className="flex items-center gap-1"><Navigation className="w-3 h-3 text-[#183A32]" aria-hidden="true" /> Mapa</span>
+          <div className="flex justify-between text-xs text-[#26332F]/70 pt-1 border-t border-[#E7E5DF]">
+            <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3 text-[#1B4931]" aria-hidden="true" /> WhatsApp</span>
+            <span className="flex items-center gap-1"><Navigation className="w-3 h-3 text-[#107492]" aria-hidden="true" /> Mapa</span>
           </div>
         </div>
 
       </div>
 
       {/* DESTINOS ATIVOS OVERVIEW */}
-      <div className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#F4EBDD] pb-3">
+      <div className="bg-white rounded-3xl border border-[#E7E5DF] shadow-sm p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[#E7E5DF] pb-3">
           <h2 className="font-serif text-lg font-bold text-[#26332F] flex items-center gap-2">
-            <Globe2 className="w-5 h-5 text-[#183A32]" />
+            <Globe2 className="w-5 h-5 text-[#107492]" />
             <span>Destinos Turísticos Cadastrados</span>
           </h2>
           <Link
             href="/admin/cidades"
-            className="text-xs font-semibold text-[#183A32] hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-[#107492] hover:underline flex items-center gap-1"
           >
             <span>Gerenciar destinos</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#F19F14]" aria-hidden="true" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {cities.map((c) => (
-            <div key={c.id} className="p-4 rounded-xl bg-[#FCFAF5] border border-[#e6dfd4] flex items-center justify-between">
+            <div key={c.id} className="p-4 rounded-2xl bg-[#F6F0D4] border border-[#E7E5DF] flex items-center justify-between">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#D49A3A]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#F19F14]" />
                   <span className="font-bold text-sm text-[#26332F]">{c.name}</span>
-                  <span className="text-[10px] bg-[#F4EBDD] px-1.5 py-0.5 rounded text-[#183A32] font-semibold">{c.state}</span>
+                  <span className="text-[10px] bg-white px-1.5 py-0.5 rounded text-[#1B4931] font-semibold border border-[#E7E5DF]">{c.state}</span>
                 </div>
-                <span className="text-[11px] text-[#52615B] block font-mono">/{c.slug}</span>
+                <span className="text-[11px] text-[#26332F]/70 block font-mono">/{c.slug}</span>
               </div>
               <Link
                 href={`/${c.slug}`}
                 target="_blank"
-                className="text-xs font-bold text-[#183A32] hover:underline"
+                className="text-xs font-bold text-[#107492] hover:underline"
               >
                 Acessar
               </Link>
@@ -201,45 +203,45 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* RECENT PARTNER LEADS SECTION */}
-      <div className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-[#F4EBDD] pb-3">
+      <div className="bg-white rounded-3xl border border-[#E7E5DF] shadow-sm p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[#E7E5DF] pb-3">
           <h2 className="font-serif text-lg font-bold text-[#26332F]">
             Últimas Propostas de Anunciantes
           </h2>
           <Link
             href="/admin/leads"
             aria-label="Ver todas as propostas"
-            className="text-xs font-semibold text-[#183A32] hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-[#107492] hover:underline flex items-center gap-1"
           >
             <span>Ver todos ({leads.length})</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#F19F14]" aria-hidden="true" />
           </Link>
         </div>
 
         {leads.length > 0 ? (
-          <div className="divide-y divide-[#F4EBDD]">
+          <div className="divide-y divide-[#E7E5DF]">
             {leads.slice(0, 5).map((lead) => (
               <div key={lead.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-[#26332F] block">{lead.company_name}</span>
-                    <span className="text-[10px] bg-[#F4EBDD] px-2 py-0.5 rounded-full text-[#183A32] font-bold">
-                      {lead.city_id === 'city-atibaia' || lead.city_id === 'atibaia' ? 'Atibaia' : 'São Roque'}
+                    <span className="text-[10px] bg-[#F6F0D4] px-2 py-0.5 rounded-full text-[#1B4931] font-bold border border-[#E7E5DF]">
+                      {lead.city_id === 'city-atibaia' || lead.city_id === 'atibaia' ? 'Atibaia' : lead.city_id === 'city-socorro' || lead.city_id === 'socorro' ? 'Socorro' : 'São Roque'}
                     </span>
                   </div>
-                  <span className="text-[#52615B]">{lead.responsible_name} • WhatsApp: {lead.whatsapp}</span>
+                  <span className="text-[#26332F]/70">{lead.responsible_name} • WhatsApp: {lead.whatsapp}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full bg-[#F4EBDD] text-[#722F3E] font-bold uppercase text-[10px] border border-[#e6dfd4]">
+                  <span className="px-2.5 py-1 rounded-full bg-[#F6F0D4] text-[#107492] font-bold uppercase text-[10px] border border-[#E7E5DF]">
                     Plano {lead.desired_plan}
                   </span>
-                  <span className="text-[#82967A]">{lead.category}</span>
+                  <span className="text-[#26332F]/60">{lead.category}</span>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-[#82967A] text-xs py-4">Nenhuma proposta recebida até o momento.</p>
+          <p className="text-[#26332F]/60 text-xs py-4">Nenhuma proposta recebida até o momento.</p>
         )}
       </div>
 

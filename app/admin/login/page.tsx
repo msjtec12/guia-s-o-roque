@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Wine, Lock, Mail, ArrowRight } from 'lucide-react';
+import { Compass, Lock, Mail, ArrowRight } from 'lucide-react';
 import { createClient as createBrowserSupabase } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState('admin@saoroque.com.br');
+  const [email, setEmail] = useState('admin@descubracidades.tur.br');
   const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -35,18 +35,18 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#183A32] flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#245247] shadow-2xl space-y-6">
+    <div className="min-h-screen bg-[#071510] flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#1B4931]/60 shadow-2xl space-y-6">
         
         <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#D49A3A] text-[#26332F] flex items-center justify-center mx-auto shadow-md">
-            <Wine className="w-6 h-6" aria-hidden="true" />
+          <div className="w-12 h-12 rounded-2xl bg-[#F19F14] text-[#071510] flex items-center justify-center mx-auto shadow-md">
+            <Compass className="w-6 h-6" aria-hidden="true" />
           </div>
           <h1 className="font-serif text-2xl font-bold text-[#26332F]">
             Acesso Administrativo
           </h1>
-          <p className="text-xs text-[#52615B]">
-            Entre com suas credenciais para gerenciar a plataforma Descubra São Roque.
+          <p className="text-xs text-[#26332F]/70">
+            Entre com suas credenciais para gerenciar a plataforma Descubra Cidades.
           </p>
         </div>
 
@@ -54,13 +54,13 @@ export default function AdminLoginPage() {
           <div className="space-y-1.5">
             <label className="font-bold text-[#26332F]">E-mail Administrativo</label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-[#82967A] absolute left-3 top-3" aria-hidden="true" />
+              <Mail className="w-4 h-4 text-[#107492] absolute left-3 top-3" aria-hidden="true" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#e6dfd4] focus:ring-2 focus:ring-[#183A32] focus:outline-none text-[#26332F]"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#E7E5DF] focus:ring-2 focus:ring-[#F19F14] focus:outline-none text-[#26332F]"
               />
             </div>
           </div>
@@ -68,13 +68,13 @@ export default function AdminLoginPage() {
           <div className="space-y-1.5">
             <label className="font-bold text-[#26332F]">Senha</label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-[#82967A] absolute left-3 top-3" aria-hidden="true" />
+              <Lock className="w-4 h-4 text-[#107492] absolute left-3 top-3" aria-hidden="true" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#e6dfd4] focus:ring-2 focus:ring-[#183A32] focus:outline-none text-[#26332F]"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#E7E5DF] focus:ring-2 focus:ring-[#F19F14] focus:outline-none text-[#26332F]"
               />
             </div>
           </div>
@@ -83,14 +83,14 @@ export default function AdminLoginPage() {
             type="submit"
             disabled={loading}
             aria-label="Acessar painel administrativo"
-            className="w-full inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-sm py-3.5 rounded-xl shadow-md transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 bg-[#F19F14] hover:bg-[#D86E04] text-[#071510] hover:text-[#FFFFFF] font-bold text-sm py-3.5 rounded-xl shadow-md transition-all cursor-pointer"
           >
             <span>{loading ? 'Entrando...' : 'Acessar Painel'}</span>
-            <ArrowRight className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
         </form>
 
-        <p className="text-[11px] text-center text-[#82967A]">
+        <p className="text-[11px] text-center text-[#26332F]/60">
           Área restrita e protegida para administradores da plataforma.
         </p>
 

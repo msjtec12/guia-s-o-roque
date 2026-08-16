@@ -10,11 +10,11 @@ interface RatingBadgeProps {
 
 export function RatingBadge({ rating = 4.8, reviewCount, showText = true, className = '' }: RatingBadgeProps) {
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/60 text-amber-900 text-xs font-semibold ${className}`}>
-      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500 shrink-0" />
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E7E5DF] text-[#26332F] text-xs font-bold shadow-xs ${className}`}>
+      <Star className="w-3.5 h-3.5 fill-[#F19F14] text-[#F19F14] shrink-0" />
       <span>{rating.toFixed(1)}</span>
       {reviewCount && showText && (
-        <span className="text-stone-500 font-normal">({reviewCount})</span>
+        <span className="text-[#26332F]/60 font-normal text-[11px]">({reviewCount})</span>
       )}
     </div>
   );

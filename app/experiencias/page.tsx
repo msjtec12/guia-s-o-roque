@@ -5,8 +5,8 @@ import { ExperienceCard } from '@/components/tourism/ExperienceCard';
 import { constructMetadata } from '@/lib/seo/metadata';
 
 export const metadata = constructMetadata({
-  title: 'Experiências em São Roque | Passeios e Turismo',
-  description: 'Descubra degustações de vinho, pisas da uva, almoços harmonizados e passeios imperdíveis em São Roque - SP.',
+  title: 'Experiências Turísticas | Descubra Cidades',
+  description: 'Descubra vivências exclusivas, degustações, passeios de aventura, trilhas e momentos imperdíveis.',
 });
 
 export const revalidate = 60;
@@ -15,19 +15,19 @@ export default async function ExperienciasPage() {
   const experiences = await getExperiences();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 space-y-8 bg-[#F6F0D4]">
       
       {/* PAGE HEADER */}
-      <div className="space-y-4 text-center md:text-left border-b border-stone-200/80 pb-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-          <span>Momentos Inesquecíveis em São Roque</span>
+      <div className="space-y-4 text-center md:text-left border-b border-[#E7E5DF] pb-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#107492] text-xs font-semibold border border-[#E7E5DF] shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-[#F19F14]" />
+          <span>Momentos & Vivências Inesquecíveis</span>
         </div>
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900">
-          Experiências em São Roque
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#26332F]">
+          Experiências Turísticas
         </h1>
-        <p className="text-sm sm:text-base text-stone-600 max-w-3xl">
-          Reserve vivências exclusivas no Roteiro do Vinho, como degustações harmonizadas, passeios por parreirais e almoços em meio à natureza.
+        <p className="text-sm sm:text-base text-[#26332F]/80 max-w-3xl">
+          Reserve vivências memoráveis em nossas cidades parceiras: degustações de vinhos finos, voos de parapente, rafting em corredeiras, visitas a parreirais e almoços na brasa.
         </p>
       </div>
 
