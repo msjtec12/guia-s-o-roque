@@ -64,6 +64,16 @@ export function constructMetadata({
   return {
     title: finalTitle,
     description: finalDescription,
+    icons: {
+      icon: [
+        { url: '/logo.png' },
+        { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+      ],
+      apple: [
+        { url: '/apple-icon.png' },
+      ],
+      shortcut: '/logo.png',
+    },
     openGraph: {
       title: finalTitle,
       description: finalDescription,

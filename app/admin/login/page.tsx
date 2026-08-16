@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Compass, Lock, Mail, ArrowRight } from 'lucide-react';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
 import { createClient as createBrowserSupabase } from '@/lib/supabase/client';
+import { Logo } from '@/components/ui/Logo';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('admin@descubracidades.tur.br');
@@ -39,8 +40,8 @@ export default function AdminLoginPage() {
       <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#1B4931]/60 shadow-2xl space-y-6">
         
         <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#F19F14] text-[#071510] flex items-center justify-center mx-auto shadow-md">
-            <Compass className="w-6 h-6" aria-hidden="true" />
+          <div className="flex justify-center pb-1">
+            <Logo variant="dark" size="lg" />
           </div>
           <h1 className="font-serif text-2xl font-bold text-[#26332F]">
             Acesso Administrativo

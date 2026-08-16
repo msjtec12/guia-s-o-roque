@@ -20,6 +20,7 @@ import {
 import { createClient as createBrowserSupabase } from '@/lib/supabase/client';
 import { AdminCityProvider, useAdminCity } from '@/components/admin/AdminCityContext';
 import { CITIES } from '@/lib/mock-data/cities';
+import { Logo } from '@/components/ui/Logo';
 
 function AdminSidebarContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -70,19 +71,12 @@ function AdminSidebarContent({ children }: { children: React.ReactNode }) {
       {/* ADMIN SIDEBAR */}
       <aside className="w-full md:w-64 bg-[#071510] text-[#FFFFFF] p-6 flex flex-col justify-between border-r border-[#1B4931]/60 shrink-0 space-y-6">
         <div className="space-y-6">
-          <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#F19F14] text-[#071510] flex items-center justify-center font-bold shadow-md">
-              <Compass className="w-5 h-5" aria-hidden="true" />
-            </div>
-            <div>
-              <span className="font-serif text-lg font-bold text-[#FFFFFF]">
-                Descubra <span className="text-[#F19F14]">Cidades</span>
-              </span>
-              <span className="block text-[10px] text-[#E7E5DF] uppercase tracking-widest font-semibold">
-                Painel Administrativo
-              </span>
-            </div>
-          </Link>
+          <div className="pt-1">
+            <Logo href="/admin" variant="light" size="sm" />
+            <span className="block text-[10px] text-[#E7E5DF] uppercase tracking-widest font-semibold mt-1">
+              Painel Administrativo
+            </span>
+          </div>
 
           {/* DROPDOWN DESTINO ATUAL NO ADMIN */}
           <div className="bg-[#1B4931]/60 p-3 rounded-2xl border border-[#1B4931] space-y-1.5">

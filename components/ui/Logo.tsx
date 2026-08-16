@@ -1,12 +1,15 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Compass } from 'lucide-react';
+import Image from 'next/image';
 
 interface LogoProps {
   variant?: 'light' | 'dark' | 'icon';
   cityName?: string;
   className?: string;
   href?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export function Logo({
@@ -14,73 +17,79 @@ export function Logo({
   cityName,
   className = '',
   href = '/',
+  size = 'md',
 }: LogoProps) {
   const isLight = variant === 'light';
   const isIcon = variant === 'icon';
 
-  const iconElement = (
-    <div
-      className={`relative flex items-center justify-center rounded-xl p-2 transition-transform duration-300 group-hover:scale-105 ${
-        isLight
-          ? 'bg-gradient-to-br from-[#F19F14] to-[#D86E04] text-[#071510] shadow-md shadow-[#F19F14]/20'
-          : 'bg-[#071510] text-[#F19F14] shadow-sm'
-      }`}
-    >
-      <Compass className="w-5 h-5 transition-transform duration-500 group-hover:rotate-45" aria-hidden="true" />
-      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#107492] ring-2 ring-[#071510]" />
-    </div>
-  );
+  const sizeClasses = {
+    sm: 'h-7 w-auto',
+    md: 'h-9 sm:h-10 w-auto',
+    lg: 'h-12 sm:h-14 w-auto',
+  };
+
+  const iconSizes = {
+    sm: 'w-7 h-7',
+    md: 'w-9 h-9',
+    lg: 'w-12 h-12',
+  };
 
   if (isIcon) {
+    const iconContent = (
+      <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-transparent transition-transform duration-300 group-hover:scale-105 ${iconSizes[size]} ${className}`}>
+        <Image
+          src="/logo.png"
+          alt="Descubra Cidades"
+          width={48}
+          height={48}
+          className="object-contain w-full h-full"
+          priority
+        />
+      </div>
+    );
+
     return href ? (
-      <Link href={href} className={`inline-block group ${className}`} aria-label="Descubra Cidades">
-        {iconElement}
+      <Link href={href} className="inline-block group" aria-label="Descubra Cidades">
+        {iconContent}
       </Link>
     ) : (
-      <div className={`inline-block group ${className}`}>{iconElement}</div>
+      <div className="inline-block group">{iconContent}</div>
     );
   }
 
-  const content = (
-    <div className={`flex items-center gap-2.5 group cursor-pointer ${className}`}>
-      {iconElement}
+  const logoContent = (
+    <div className={`inline-flex items-center gap-3 group cursor-pointer ${className}`}>
+      <div className="relative flex items-center">
+        <Image
+          src="/logo.png"
+          alt="Descubra Cidades"
+          width={180}
+          height={50}
+          className={`${sizeClasses[size]} object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm`}
+          priority
+        />
+      </div>
 
-      <div className="flex flex-col text-left leading-none">
-        <div className="flex items-baseline gap-1">
-          <span
-            className={`font-serif text-lg sm:text-xl font-extrabold tracking-tight transition-colors ${
-              isLight ? 'text-[#FFFFFF] group-hover:text-[#F19F14]' : 'text-[#071510] group-hover:text-[#107492]'
-            }`}
-          >
-            Descubra
+      {cityName && (
+        <div className="flex flex-col border-l border-[#E7E5DF]/30 pl-2.5 leading-tight">
+          <span className="font-sans text-xs sm:text-sm font-extrabold tracking-wider uppercase text-[#F19F14]">
+            {cityName}
           </span>
-          <span
-            className={`font-sans text-xs sm:text-sm font-bold tracking-wider uppercase ${
-              cityName ? 'text-[#F19F14]' : isLight ? 'text-[#F19F14]' : 'text-[#107492]'
-            }`}
-          >
-            {cityName || 'Cidades'}
+          <span className={`text-[9px] font-semibold tracking-widest uppercase ${isLight ? 'text-[#E7E5DF]/80' : 'text-[#26332F]/70'}`}>
+            Guia Oficial
           </span>
         </div>
-
-        <span
-          className={`text-[9px] font-semibold tracking-widest uppercase transition-opacity ${
-            isLight ? 'text-[#E7E5DF]/80 group-hover:opacity-100' : 'text-[#26332F]/70'
-          }`}
-        >
-          {cityName ? 'Guia Oficial • Turismo' : 'Lugares & Experiências'}
-        </span>
-      </div>
+      )}
     </div>
   );
 
   if (href) {
     return (
-      <Link href={href} className="inline-block" aria-label="Ir para a página inicial">
-        {content}
+      <Link href={href} className="inline-block" aria-label={cityName ? `Descubra ${cityName}` : 'Descubra Cidades'}>
+        {logoContent}
       </Link>
     );
   }
 
-  return content;
+  return logoContent;
 }
