@@ -59,6 +59,7 @@ export type Business = {
   category?: Category;
   city?: City;
   gallery?: BusinessImage[];
+  images?: BusinessImage[];
   experiences?: Experience[];
   rating?: number;
   review_count?: number;

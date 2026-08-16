@@ -45,34 +45,47 @@ let localExperiences: Experience[] = [...SAO_ROQUE_EXPERIENCES, ...ATIBAIA_EXPER
 let localRoutes: Route[] = [...SAO_ROQUE_ROUTES, ...ATIBAIA_ROUTES, ...SOCORRO_ROUTES];
 let localEvents: EventItem[] = [...SAO_ROQUE_EVENTS, ...ATIBAIA_EVENTS, ...SOCORRO_EVENTS];
 
-// In-memory leads storage for demo mode
+// In-memory leads storage for offline/fallback mode
 let memoryLeads: PartnerLead[] = [
   {
     id: 'lead-1',
-    company_name: 'Adega Bella Vista (DEMO)',
-    responsible_name: 'Carlos Alberto',
+    company_name: 'Vinícola Bella Aurora',
+    responsible_name: 'Carlos Alberto Góes',
     whatsapp: '11988887777',
-    email: 'carlos@adegabellavista.com.br',
+    email: 'carlos@vinicolabellaaurora.com.br',
     category: 'Vinícolas & Adegas',
     city_id: 'city-sao-roque',
     desired_plan: 'highlight',
-    message: 'Gostaria de colocar nossa adega em destaque no Roteiro do Vinho.',
+    message: 'Gostaria de colocar nossa vinícola e os novos passeios em destaque no Roteiro do Vinho.',
     status: 'pending',
     created_at: new Date().toISOString(),
   },
   {
     id: 'lead-2',
-    company_name: 'Voo Panorâmico Mantiqueira (DEMO)',
+    company_name: 'Voo Livre Mantiqueira',
     responsible_name: 'Mariana Lima',
     whatsapp: '11977776666',
-    email: 'mariana@voomantiqueira.com.br',
+    email: 'mariana@voolivremantiqueira.com.br',
     category: 'Turismo de Aventura',
     city_id: 'city-atibaia',
     desired_plan: 'premium',
-    message: 'Queremos anunciar nossos voos duplos de parapente no Descubra Atibaia.',
+    message: 'Queremos anunciar nossos voos duplos de parapente e asa-delta na Pedra Grande.',
     status: 'pending',
     created_at: new Date(Date.now() - 3600000).toISOString(),
   },
+  {
+    id: 'lead-3',
+    company_name: 'Pousada Encanto da Mantiqueira',
+    responsible_name: 'Roberto Mendes',
+    whatsapp: '19998885544',
+    email: 'contato@encantodamantiqueira.com.br',
+    category: 'Pousadas & Chalés',
+    city_id: 'city-socorro',
+    desired_plan: 'premium',
+    message: 'Temos chalés de luxo com vista panorâmica para as montanhas e queremos entrar como destaque em Socorro.',
+    status: 'pending',
+    created_at: new Date(Date.now() - 7200000).toISOString(),
+  }
 ];
 
 // Helper to normalize city slug or ID
