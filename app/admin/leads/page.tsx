@@ -1,23 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getPartnerLeads, updatePartnerLeadStatusAdmin, deletePartnerLeadAdmin } from '@/lib/services/data';
 import { PartnerLead, LeadStatus } from '@/types';
-import { MessageCircle, Trash2 } from 'lucide-react';
+import { MessageCircle, Trash2, MapPin } from 'lucide-react';
 import { buildWhatsAppUrl } from '@/lib/utils';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminLeadsPage() {
+  const { selectedCityId } = useAdminCity();
   const [leads, setLeads] = useState<PartnerLead[]>([]);
   const [filterPlan, setFilterPlan] = useState<string>('all');
 
+  const loadLeads = useCallback(async () => {
+    const data = await getPartnerLeads(selectedCityId !== 'all' ? selectedCityId : undefined);
+    setLeads(data);
+  }, [selectedCityId]);
+
   useEffect(() => {
     loadLeads();
-  }, []);
-
-  const loadLeads = async () => {
-    const data = await getPartnerLeads();
-    setLeads(data);
-  };
+  }, [loadLeads]);
 
   const handleStatusChange = async (id: string, newStatus: LeadStatus) => {
     await updatePartnerLeadStatusAdmin(id, newStatus);
@@ -68,14 +70,20 @@ export default function AdminLeadsPage() {
         {filteredLeads.length > 0 ? (
           <div className="divide-y divide-[#F4EBDD]">
             {filteredLeads.map((lead) => {
-              const salesMsg = `Olá, ${lead.responsible_name}. Recebemos seu interesse em anunciar no Descubra São Roque e gostaríamos de conversar sobre o cadastro da sua empresa.`;
-              const waUrl = buildWhatsAppUrl(lead.whatsapp, lead.company_name, salesMsg);
+              const isAtibaia = lead.city_id === 'city-atibaia' || lead.city_id === 'atibaia';
+              const cityName = isAtibaia ? 'Atibaia' : 'São Roque';
+              const salesMsg = `Olá, ${lead.responsible_name}. Recebemos seu interesse em anunciar no Descubra ${cityName} e gostaríamos de conversar sobre o cadastro da sua empresa.`;
+              const waUrl = buildWhatsAppUrl(lead.whatsapp, lead.company_name, salesMsg, cityName);
               
               return (
                 <div key={lead.id} className="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h4 className="font-serif font-bold text-[#26332F] text-base">{lead.company_name}</h4>
+                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2 py-0.5 rounded-md text-[10px] font-bold border border-[#e6dfd4]">
+                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                        {cityName}
+                      </span>
                       <span
                         className={`px-2.5 py-0.5 rounded-full font-bold uppercase text-[10px] ${
                           lead.desired_plan === 'premium'
@@ -93,7 +101,7 @@ export default function AdminLeadsPage() {
                       Responsável: <span className="font-semibold text-[#26332F]">{lead.responsible_name}</span> | E-mail: {lead.email} | WhatsApp: {lead.whatsapp}
                     </p>
                     <p className="text-xs text-[#82967A]">
-                      Categoria: <span className="font-medium text-[#26332F]">{lead.category}</span> | Endereço: {lead.address || 'São Roque - SP'}
+                      Categoria: <span className="font-medium text-[#26332F]">{lead.category}</span> | Endereço: {lead.address || `${cityName} - SP`}
                     </p>
 
                     {lead.message && (
@@ -131,7 +139,7 @@ export default function AdminLeadsPage() {
                     <button
                       onClick={() => handleDeleteLead(lead.id)}
                       aria-label={`Excluir proposta de ${lead.company_name}`}
-                      className="p-2 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-xl transition-colors"
+                      className="p-2 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-xl transition-colors cursor-pointer"
                       title="Excluir proposta"
                     >
                       <Trash2 className="w-4 h-4" aria-hidden="true" />

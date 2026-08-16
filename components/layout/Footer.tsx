@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Wine, MapPin } from 'lucide-react';
+import { Compass, MapPin, Wine, Trees } from 'lucide-react';
+import { CITIES } from '@/lib/mock-data/cities';
 
 export function Footer() {
   return (
@@ -10,59 +11,70 @@ export function Footer() {
           
           {/* BRAND COLUMN */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-3" aria-label="Página Inicial - Descubra São Roque">
+            <Link href="/" className="flex items-center gap-3" aria-label="Página Inicial - Descubra">
               <div className="w-10 h-10 rounded-xl bg-[#D49A3A] flex items-center justify-center text-[#26332F] font-bold shadow-md">
-                <Wine className="w-5 h-5" aria-hidden="true" />
+                <Compass className="w-5 h-5" aria-hidden="true" />
               </div>
               <span className="font-serif text-2xl font-bold text-[#FCFAF5]">
-                Descubra <span className="text-[#D49A3A] font-normal">São Roque</span>
+                Descubra<span className="text-[#D49A3A]">.</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-[#F4EBDD]/80 max-w-sm">
-              Plataforma e guia digital oficial para turistas descobrirem vinícolas, restaurantes, hospedagens, passeios e o Roteiro do Vinho em São Roque - SP.
+              Rede de guias turísticos digitais especializados em destinos do Brasil. Descubra lugares, experiências e sabores.
             </p>
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2 pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#245247] text-[#FCFAF5] text-xs border border-[#82967A]/40">
                 <MapPin className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                Estância Turística de São Roque - SP
+                São Roque • Atibaia • São Paulo
               </span>
             </div>
           </div>
 
-          {/* QUICK LINKS */}
+          {/* DESTINATIONS COLUMN */}
           <div className="space-y-3">
-            <h4 className="text-[#FCFAF5] font-semibold text-sm uppercase tracking-wider">Navegação</h4>
+            <h4 className="text-[#FCFAF5] font-semibold text-sm uppercase tracking-wider">Destinos</h4>
             <ul className="space-y-2 text-sm text-[#F4EBDD]">
-              <li>
-                <Link href="/explorar" className="hover:text-[#D49A3A] transition-colors">Explorar Guia</Link>
-              </li>
-              <li>
-                <Link href="/experiencias" className="hover:text-[#D49A3A] transition-colors">Experiências</Link>
-              </li>
-              <li>
-                <Link href="/roteiros" className="hover:text-[#D49A3A] transition-colors">Roteiros Prontos</Link>
-              </li>
-              <li>
-                <Link href="/eventos" className="hover:text-[#D49A3A] transition-colors">Calendário de Eventos</Link>
+              {CITIES.map((city) => {
+                const isSR = city.slug === 'sao-roque';
+                const Icon = isSR ? Wine : Trees;
+                return (
+                  <li key={city.id}>
+                    <Link
+                      href={`/${city.slug}`}
+                      className="hover:text-[#D49A3A] transition-colors inline-flex items-center gap-1.5"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-[#D49A3A]" />
+                      <span>{city.name} - {city.state}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+              <li className="pt-1">
+                <Link href="/#destinos" className="text-xs text-[#82967A] hover:text-[#D49A3A] transition-colors">
+                  + Novos destinos em breve
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* CATEGORIES */}
+          {/* EXPLORAR E EXPERIÊNCIAS */}
           <div className="space-y-3">
-            <h4 className="text-[#FCFAF5] font-semibold text-sm uppercase tracking-wider">Categorias</h4>
+            <h4 className="text-[#FCFAF5] font-semibold text-sm uppercase tracking-wider">Navegação</h4>
             <ul className="space-y-2 text-sm text-[#F4EBDD]">
               <li>
-                <Link href="/explorar?category=vinicolas-adegas" className="hover:text-[#D49A3A] transition-colors">Vinícolas & Adegas</Link>
+                <Link href="/sao-roque/explorar" className="hover:text-[#D49A3A] transition-colors">Explorar São Roque</Link>
               </li>
               <li>
-                <Link href="/explorar?category=restaurantes" className="hover:text-[#D49A3A] transition-colors">Restaurantes</Link>
+                <Link href="/atibaia/explorar" className="hover:text-[#D49A3A] transition-colors">Explorar Atibaia</Link>
               </li>
               <li>
-                <Link href="/explorar?category=hospedagem" className="hover:text-[#D49A3A] transition-colors">Hotéis & Pousadas</Link>
+                <Link href="/sao-roque/roteiros" className="hover:text-[#D49A3A] transition-colors">Roteiros em São Roque</Link>
               </li>
               <li>
-                <Link href="/explorar?category=passeios-agencias" className="hover:text-[#D49A3A] transition-colors">Passeios Turísticos</Link>
+                <Link href="/atibaia/roteiros" className="hover:text-[#D49A3A] transition-colors">Roteiros em Atibaia</Link>
+              </li>
+              <li>
+                <Link href="/sao-roque/eventos" className="hover:text-[#D49A3A] transition-colors">Eventos & Festas</Link>
               </li>
             </ul>
           </div>
@@ -71,7 +83,7 @@ export function Footer() {
           <div className="space-y-3">
             <h4 className="text-[#FCFAF5] font-semibold text-sm uppercase tracking-wider">Para Empresas</h4>
             <p className="text-xs text-[#82967A]">
-              Divulgue seu estabelecimento para milhares de turistas que visitam São Roque mensalmente.
+              Conecte sua empresa a visitantes que estão planejando sua próxima viagem para São Roque e Atibaia.
             </p>
             <Link
               href="/para-empresas"
@@ -85,9 +97,11 @@ export function Footer() {
 
         {/* BOTTOM DISCLAIMER & COPYRIGHT */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#82967A]">
-          <p>© {new Date().getFullYear()} Descubra São Roque. Todos os direitos reservados. Projeto Multi-cidades MVP.</p>
+          <p>© {new Date().getFullYear()} DESCUBRA. Plataforma de Turismo Digital Multicidade. Todos os direitos reservados.</p>
           <div className="flex items-center gap-4">
-            <Link href="/para-empresas" className="hover:text-[#D49A3A]">Seja Nosso Parceiro</Link>
+            <Link href="/para-empresas" className="hover:text-[#D49A3A]">Seja um Anunciante</Link>
+            <span>•</span>
+            <Link href="/admin/login" className="hover:text-[#D49A3A]">Acesso Restrito</Link>
           </div>
         </div>
 

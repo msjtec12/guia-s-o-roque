@@ -9,12 +9,14 @@ import { BusinessPlan } from '@/types';
 interface CadastroParceiroPageProps {
   searchParams: Promise<{
     plan?: string;
+    city?: string;
   }>;
 }
 
 export default function CadastroParceiroPage({ searchParams }: CadastroParceiroPageProps) {
   const resolvedParams = use(searchParams);
   const initialPlan = (resolvedParams?.plan as BusinessPlan) || 'highlight';
+  const initialCity = resolvedParams?.city === 'atibaia' ? 'city-atibaia' : 'city-sao-roque';
 
   const [formData, setFormData] = useState({
     company_name: '',
@@ -22,7 +24,7 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
     whatsapp: '',
     email: '',
     category: 'Restaurantes',
-    city_id: 'sao-roque',
+    city_id: initialCity,
     address: '',
     instagram: '',
     website: '',
@@ -93,50 +95,50 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 space-y-8 bg-[#FCFAF5]">
       
       {/* BREADCRUMB */}
       <Link
         href="/para-empresas"
-        className="inline-flex items-center gap-1 text-xs font-semibold text-stone-600 hover:text-emerald-800 transition-colors"
+        className="inline-flex items-center gap-1 text-xs font-semibold text-[#52615B] hover:text-[#183A32] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Voltar para Planos</span>
       </Link>
 
       {/* HEADER */}
-      <div className="space-y-2 text-center md:text-left border-b border-stone-200/80 pb-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-semibold">
-          <Building2 className="w-3.5 h-3.5 text-emerald-700" />
-          <span>Formulário Oficial de Anunciante</span>
+      <div className="space-y-2 text-center md:text-left border-b border-[#e6dfd4] pb-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F4EBDD] text-[#183A32] text-xs font-semibold border border-[#e6dfd4]">
+          <Building2 className="w-3.5 h-3.5 text-[#183A32]" />
+          <span>Formulário Oficial de Anunciante • Plataforma Descubra</span>
         </div>
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#26332F]">
           Cadastre sua Empresa
         </h1>
-        <p className="text-sm text-stone-600">
-          Preencha os dados abaixo para publicar ou pré-cadastrar seu estabelecimento na plataforma Descubra São Roque.
+        <p className="text-sm text-[#52615B]">
+          Preencha os dados abaixo para publicar ou pré-cadastrar seu estabelecimento no portal Descubra.
         </p>
       </div>
 
       {/* SUCCESS MODAL OR CONFIRMATION SCREEN */}
       {isSubmitted ? (
-        <div className="bg-white rounded-3xl p-10 border border-stone-200/80 shadow-xl text-center space-y-6 animate-in zoom-in-95 duration-300 max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-8 h-8" />
+        <div className="bg-white rounded-3xl p-10 border border-[#e6dfd4] shadow-xl text-center space-y-6 animate-in zoom-in-95 duration-300 max-w-lg mx-auto">
+          <div className="w-16 h-16 rounded-full bg-[#F4EBDD] text-[#183A32] flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-8 h-8 text-[#183A32]" />
           </div>
           <div className="space-y-2">
-            <h2 className="font-serif text-2xl font-bold text-stone-900">
-              Cadastro recebido!
+            <h2 className="font-serif text-2xl font-bold text-[#26332F]">
+              Cadastro recebido com sucesso!
             </h2>
-            <p className="text-sm text-stone-600 leading-relaxed">
-              Obrigado pelo interesse. Recebemos os dados da sua empresa e entraremos em contato.
+            <p className="text-sm text-[#52615B] leading-relaxed">
+              Obrigado pelo interesse. Recebemos os dados da sua empresa e nossa equipe comercial entrará em contato via WhatsApp.
             </p>
           </div>
 
-          <div className="pt-4 border-t border-stone-100 flex justify-center">
+          <div className="pt-4 border-t border-[#F4EBDD] flex justify-center">
             <Link
               href="/"
-              className="bg-emerald-800 hover:bg-emerald-900 text-white font-semibold text-sm px-6 py-3 rounded-xl shadow-md transition-all"
+              className="bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-semibold text-sm px-6 py-3 rounded-xl shadow-md transition-all"
             >
               Voltar para a Página Principal
             </Link>
@@ -144,19 +146,35 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
         </div>
       ) : (
         /* FORM */
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 border border-stone-200/80 shadow-md space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 border border-[#e6dfd4] shadow-md space-y-6">
           
           {errorMessage && (
-            <div className="p-4 rounded-xl bg-rose-50 text-rose-800 text-xs font-medium border border-rose-200">
+            <div className="p-4 rounded-xl bg-[#722F3E]/10 text-[#722F3E] text-xs font-medium border border-[#722F3E]/30">
               {errorMessage}
             </div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
+            {/* SELEÇÃO DA CIDADE */}
+            <div className="space-y-1.5 md:col-span-2">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
+                Cidade de Atuação do Estabelecimento *
+              </label>
+              <select
+                name="city_id"
+                value={formData.city_id}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-semibold bg-[#FCFAF5]"
+              >
+                <option value="city-sao-roque">São Roque - SP (Roteiro do Vinho & Região)</option>
+                <option value="city-atibaia">Atibaia - SP (Pedra Grande & Região)</option>
+              </select>
+            </div>
+
             {/* NOME DA EMPRESA */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Nome da Empresa *
               </label>
               <input
@@ -166,13 +184,13 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 onChange={handleChange}
                 placeholder="Ex.: Vinícola Bella Vista"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* RESPONSÁVEL */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Nome do Responsável *
               </label>
               <input
@@ -182,13 +200,13 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 onChange={handleChange}
                 placeholder="Ex.: João Carlos"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* WHATSAPP */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 WhatsApp Comercial *
               </label>
               <input
@@ -198,13 +216,13 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 onChange={handleChange}
                 placeholder="(11) 99999-9999"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* EMAIL */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 E-mail de Contato *
               </label>
               <input
@@ -214,51 +232,52 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 onChange={handleChange}
                 placeholder="contato@suaempresa.com.br"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* CATEGORIA */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Categoria Principal
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium bg-white"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium bg-white"
               >
+                <option value="Restaurantes">Restaurantes / Gastronomia</option>
                 <option value="Vinícolas & Adegas">Vinícolas & Adegas</option>
-                <option value="Restaurantes">Restaurantes</option>
-                <option value="Hospedagem">Hotéis & Pousadas</option>
-                <option value="Passeios & Agências">Passeios Turísticos</option>
+                <option value="Cervejarias Artesanais">Cervejarias Artesanais</option>
+                <option value="Hospedagem">Hotéis, Pousadas & Resorts</option>
+                <option value="Passeios & Agências">Passeios, Aventura & Ecoturismo</option>
+                <option value="Produtores Locais">Produtores Locais & Morangos</option>
                 <option value="Cafés & Docerias">Cafés & Docerias</option>
-                <option value="Natureza & Trilhas">Natureza & Trilhas</option>
-                <option value="Compras & Doces">Empórios & Compras</option>
+                <option value="Compras & Artesanato">Compras, Flores & Empórios</option>
               </select>
             </div>
 
             {/* PLANO DESEJADO */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Plano Desejado
               </label>
               <select
                 name="desired_plan"
                 value={formData.desired_plan}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium bg-white"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium bg-white"
               >
                 <option value="free">Plano Gratuito (R$ 0)</option>
                 <option value="highlight">Plano Destaque (R$ 39,90/mês)</option>
-                <option value="premium">Plano Premium (R$ 79,90/mês)</option>
+                <option value="premium">Plano Premium VIP (R$ 79,90/mês)</option>
               </select>
             </div>
 
             {/* ENDEREÇO */}
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Endereço Completo
               </label>
               <input
@@ -266,14 +285,14 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                placeholder="Ex.: Estrada do Vinho, km 5, São Roque - SP"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                placeholder="Ex.: Rodovia Dom Pedro I / Estrada do Vinho, SP"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* INSTAGRAM */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Instagram (@usuario)
               </label>
               <input
@@ -281,14 +300,14 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 name="instagram"
                 value={formData.instagram}
                 onChange={handleChange}
-                placeholder="exemplo.saoroque"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                placeholder="exemplo.oficial"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* WEBSITE */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Website
               </label>
               <input
@@ -297,13 +316,13 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 value={formData.website}
                 onChange={handleChange}
                 placeholder="https://suaempresa.com.br"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* DESCRIÇÃO */}
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Breve Descrição do Estabelecimento
               </label>
               <textarea
@@ -312,13 +331,13 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Conte um pouco sobre suas especialidades, ambiente e atrações..."
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
             {/* MENSAGEM */}
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#26332F] uppercase tracking-wider">
                 Observações ou Dúvidas
               </label>
               <textarea
@@ -327,7 +346,7 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Alguma informação adicional que gostaria de nos contar..."
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-[#e6dfd4] focus:outline-none focus:ring-2 focus:ring-[#183A32] text-sm font-medium"
               />
             </div>
 
@@ -341,22 +360,22 @@ export default function CadastroParceiroPage({ searchParams }: CadastroParceiroP
                 name="termsAccepted"
                 checked={formData.termsAccepted}
                 onChange={handleChange}
-                className="w-4 h-4 mt-1 rounded text-emerald-800 focus:ring-emerald-600 accent-emerald-800"
+                className="w-4 h-4 mt-1 rounded text-[#183A32] focus:ring-[#183A32] accent-[#183A32]"
               />
-              <span className="text-xs text-stone-600 leading-normal">
+              <span className="text-xs text-[#52615B] leading-normal">
                 Concordo em receber contato sobre o cadastro da minha empresa e autorizo o envio de mensagens informativas via WhatsApp/E-mail.
               </span>
             </label>
           </div>
 
           {/* SUBMIT BUTTON */}
-          <div className="pt-4 border-t border-stone-100 flex justify-end">
+          <div className="pt-4 border-t border-[#F4EBDD] flex justify-end">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg transition-all disabled:opacity-50 cursor-pointer"
             >
-              <Send className="w-4 h-4 text-amber-400" />
+              <Send className="w-4 h-4 text-[#D49A3A]" />
               <span>{isSubmitting ? 'Enviando...' : 'Enviar Cadastro'}</span>
             </button>
           </div>

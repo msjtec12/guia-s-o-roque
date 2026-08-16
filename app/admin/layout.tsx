@@ -12,19 +12,19 @@ import {
   Calendar, 
   Users, 
   TrendingUp,
-  Wine,
+  Compass,
   LogOut,
-  ExternalLink
+  ExternalLink,
+  Globe2
 } from 'lucide-react';
 import { createClient as createBrowserSupabase } from '@/lib/supabase/client';
+import { AdminCityProvider, useAdminCity } from '@/components/admin/AdminCityContext';
+import { CITIES } from '@/lib/mock-data/cities';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AdminSidebarContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { selectedCityId, setSelectedCityId } = useAdminCity();
 
   useEffect(() => {
     if (pathname === '/admin/login') return;
@@ -36,16 +36,13 @@ export default function AdminLayout({
     }
   }, [pathname, router]);
 
-  // If we are on /admin/login, render only children (login page) without sidebar layout
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
   const handleLogout = async () => {
-    // Clear admin auth cookie
     document.cookie = 'admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
 
-    // Sign out from Supabase if connected
     const supabase = createBrowserSupabase();
     if (supabase) {
       await supabase.auth.signOut();
@@ -57,6 +54,7 @@ export default function AdminLayout({
 
   const menuItems = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { name: 'Cidades & Destinos', href: '/admin/cidades', icon: Globe2 },
     { name: 'Analytics', href: '/admin/analytics', icon: TrendingUp },
     { name: 'Empresas', href: '/admin/empresas', icon: Building2 },
     { name: 'Categorias', href: '/admin/categorias', icon: Tags },
@@ -70,21 +68,40 @@ export default function AdminLayout({
     <div className="min-h-screen bg-[#FCFAF5] flex flex-col md:flex-row font-sans text-[#26332F]">
       
       {/* ADMIN SIDEBAR */}
-      <aside className="w-full md:w-64 bg-[#183A32] text-[#FCFAF5] p-6 flex flex-col justify-between border-r border-[#245247] shrink-0">
-        <div className="space-y-8">
+      <aside className="w-full md:w-64 bg-[#183A32] text-[#FCFAF5] p-6 flex flex-col justify-between border-r border-[#245247] shrink-0 space-y-6">
+        <div className="space-y-6">
           <Link href="/admin" className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#D49A3A] text-[#26332F] flex items-center justify-center font-bold shadow-md">
-              <Wine className="w-5 h-5" aria-hidden="true" />
+              <Compass className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
               <span className="font-serif text-lg font-bold text-[#FCFAF5]">
-                Admin <span className="text-[#D49A3A]">São Roque</span>
+                Admin <span className="text-[#D49A3A]">Descubra</span>
               </span>
               <span className="block text-[10px] text-[#82967A] uppercase tracking-widest font-semibold">
-                Painel Restrito
+                Painel Multicidade
               </span>
             </div>
           </Link>
+
+          {/* DROPDOWN DESTINO ATUAL NO ADMIN */}
+          <div className="bg-[#245247]/70 p-3 rounded-2xl border border-[#82967A]/30 space-y-1.5">
+            <label className="text-[10px] uppercase tracking-wider text-[#D49A3A] font-bold block">
+              Destino Atual Selecionado:
+            </label>
+            <select
+              value={selectedCityId}
+              onChange={(e) => setSelectedCityId(e.target.value)}
+              className="w-full bg-[#183A32] text-xs font-semibold text-[#FCFAF5] p-2 rounded-xl border border-[#82967A]/50 focus:outline-none focus:ring-1 focus:ring-[#D49A3A] cursor-pointer"
+            >
+              <option value="all">🌐 Todas as Cidades</option>
+              {CITIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  📍 {c.name} - {c.state}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <nav className="space-y-1">
             {menuItems.map((item) => {
@@ -134,5 +151,13 @@ export default function AdminLayout({
       </main>
 
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AdminCityProvider>
+      <AdminSidebarContent>{children}</AdminSidebarContent>
+    </AdminCityProvider>
   );
 }

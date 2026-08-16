@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Plus, 
@@ -10,41 +10,48 @@ import {
   EyeOff, 
   X, 
   Search,
-  Clock
+  Clock,
+  MapPin
 } from 'lucide-react';
 import { 
   getAllExperiencesAdmin, 
   saveExperienceAdmin, 
   deleteExperienceAdmin, 
   getAllBusinessesAdmin, 
-  getCategories 
+  getCategories,
+  getAllCitiesAdmin
 } from '@/lib/services/data';
-import { Experience, Business, Category } from '@/types';
+import { Experience, Business, Category, City } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 import { ImageUploadInput } from '@/components/ui/ImageUploadInput';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminExperienciasPage() {
+  const { selectedCityId } = useAdminCity();
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExp, setEditingExp] = useState<Partial<Experience> | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    const [expList, bizList, catList] = await Promise.all([
-      getAllExperiencesAdmin(),
-      getAllBusinessesAdmin(),
-      getCategories(),
+  const loadData = useCallback(async () => {
+    const [expList, bizList, catList, cityList] = await Promise.all([
+      getAllExperiencesAdmin(selectedCityId),
+      getAllBusinessesAdmin(selectedCityId),
+      getCategories(selectedCityId !== 'all' ? (selectedCityId === 'city-atibaia' ? 'atibaia' : 'sao-roque') : undefined),
+      getAllCitiesAdmin(),
     ]);
     setExperiences(expList);
     setBusinesses(bizList);
     setCategories(catList);
-  };
+    setCities(cityList);
+  }, [selectedCityId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleOpenModal = (exp?: Experience) => {
     if (exp) {
@@ -56,6 +63,7 @@ export default function AdminExperienciasPage() {
         description: '',
         business_id: businesses[0]?.id || '',
         category_id: categories[0]?.id || '',
+        city_id: selectedCityId !== 'all' ? selectedCityId : 'city-sao-roque',
         duration: '2 horas',
         price: 80,
         main_image_url: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
@@ -109,13 +117,13 @@ export default function AdminExperienciasPage() {
             Gerenciar Experiências Turísticas
           </h1>
           <p className="text-xs text-[#52615B]">
-            Cadastre degustações, visitas guiadas, piqueniques e atrações marcantes em São Roque
+            Cadastre degustações, voos de parapente, visitas guiadas, piqueniques e atrações marcantes
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar nova experiência"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
           <span>Cadastrar Nova Experiência</span>
@@ -143,6 +151,7 @@ export default function AdminExperienciasPage() {
             <thead className="bg-[#FCFAF5] border-b border-[#e6dfd4] text-[#26332F] font-bold uppercase tracking-wider">
               <tr>
                 <th className="p-4">Experiência</th>
+                <th className="p-4">Destino</th>
                 <th className="p-4">Empresa / Local</th>
                 <th className="p-4">Duração</th>
                 <th className="p-4">Preço</th>
@@ -151,69 +160,78 @@ export default function AdminExperienciasPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#F4EBDD] font-medium">
-              {filteredExperiences.map((exp) => (
-                <tr key={exp.id} className="hover:bg-[#FCFAF5] transition-colors">
-                  <td className="p-4 flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
-                      <Image
-                        src={exp.main_image_url || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=100&q=80'}
-                        alt={exp.name}
-                        fill
-                        className="object-cover"
-                        unoptimized={exp.main_image_url?.startsWith('data:')}
-                      />
-                    </div>
-                    <div>
-                      <span className="font-bold text-[#26332F] block">{exp.name}</span>
-                      <span className="text-[#52615B] text-[11px] line-clamp-1">{exp.description}</span>
-                    </div>
-                  </td>
-                  <td className="p-4 text-[#26332F]">
-                    {exp.business?.name || 'Local Não Informado'}
-                  </td>
-                  <td className="p-4 text-[#52615B] whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#183A32]" aria-hidden="true" />
-                      {exp.duration}
-                    </span>
-                  </td>
-                  <td className="p-4 font-bold text-[#722F3E]">
-                    {exp.price > 0 ? formatCurrency(exp.price) : 'Gratuito'}
-                  </td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => handleToggleStatus(exp)}
-                      aria-label={`Alterar status da experiência ${exp.name}`}
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                        exp.status === 'published'
-                          ? 'bg-[#183A32] text-[#FCFAF5]'
-                          : 'bg-[#F4EBDD] text-[#26332F]'
-                      }`}
-                    >
-                      {exp.status === 'published' ? <Eye className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
-                      <span>{exp.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
-                    </button>
-                  </td>
-                  <td className="p-4 space-x-2 whitespace-nowrap">
-                    <button
-                      onClick={() => handleOpenModal(exp)}
-                      aria-label={`Editar experiência ${exp.name}`}
-                      className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors"
-                      title="Editar"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(exp.id)}
-                      aria-label={`Excluir experiência ${exp.name}`}
-                      className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors"
-                      title="Excluir"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {filteredExperiences.map((exp) => {
+                const cityName = exp.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque';
+                return (
+                  <tr key={exp.id} className="hover:bg-[#FCFAF5] transition-colors">
+                    <td className="p-4 flex items-center gap-3">
+                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
+                        <Image
+                          src={exp.main_image_url || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=100&q=80'}
+                          alt={exp.name}
+                          fill
+                          className="object-cover"
+                          unoptimized={exp.main_image_url?.startsWith('data:')}
+                        />
+                      </div>
+                      <div>
+                        <span className="font-bold text-[#26332F] block">{exp.name}</span>
+                        <span className="text-[#52615B] text-[11px] line-clamp-1">{exp.description}</span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#e6dfd4]">
+                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                        {cityName}
+                      </span>
+                    </td>
+                    <td className="p-4 text-[#26332F]">
+                      {exp.business?.name || 'Local Não Informado'}
+                    </td>
+                    <td className="p-4 text-[#52615B] whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-[#183A32]" aria-hidden="true" />
+                        {exp.duration}
+                      </span>
+                    </td>
+                    <td className="p-4 font-bold text-[#722F3E]">
+                      {exp.price > 0 ? formatCurrency(exp.price) : 'Gratuito'}
+                    </td>
+                    <td className="p-4">
+                      <button
+                        onClick={() => handleToggleStatus(exp)}
+                        aria-label={`Alterar status da experiência ${exp.name}`}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${
+                          exp.status === 'published'
+                            ? 'bg-[#183A32] text-[#FCFAF5]'
+                            : 'bg-[#F4EBDD] text-[#26332F]'
+                        }`}
+                      >
+                        {exp.status === 'published' ? <Eye className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
+                        <span>{exp.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
+                      </button>
+                    </td>
+                    <td className="p-4 space-x-2 whitespace-nowrap">
+                      <button
+                        onClick={() => handleOpenModal(exp)}
+                        aria-label={`Editar experiência ${exp.name}`}
+                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
+                        title="Editar"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(exp.id)}
+                        aria-label={`Excluir experiência ${exp.name}`}
+                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
+                        title="Excluir"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -227,7 +245,7 @@ export default function AdminExperienciasPage() {
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingExp.id ? 'Editar Experiência' : 'Cadastrar Nova Experiência'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F]">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -235,6 +253,21 @@ export default function AdminExperienciasPage() {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
+                <div>
+                  <label className="font-bold text-[#26332F] block mb-1">Destino / Cidade *</label>
+                  <select
+                    value={editingExp.city_id || 'city-sao-roque'}
+                    onChange={(e) => setEditingExp({ ...editingExp, city_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                  >
+                    {cities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="font-bold text-[#26332F] block mb-1">Título da Experiência *</label>
                   <input
@@ -282,7 +315,6 @@ export default function AdminExperienciasPage() {
                   />
                 </div>
 
-                {/* DUAL IMAGE INPUT (LOCAL FILE OR URL) */}
                 <ImageUploadInput
                   value={editingExp.main_image_url || ''}
                   onChange={(url) => setEditingExp({ ...editingExp, main_image_url: url })}
@@ -305,13 +337,13 @@ export default function AdminExperienciasPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold"
+                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
                 >
                   Salvar Experiência
                 </button>

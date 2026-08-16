@@ -15,8 +15,10 @@ import {
 } from 'lucide-react';
 import { getAnalyticsMetrics, getTopBusinessesAnalytics } from '@/lib/services/analytics';
 import { AnalyticsMetrics, TopBusinessMetric, PeriodFilter } from '@/types';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminAnalyticsPage() {
+  const { selectedCityId } = useAdminCity();
   const [period, setPeriod] = useState<PeriodFilter>('30days');
   const [metrics, setMetrics] = useState<AnalyticsMetrics>({
     pageViews: 1420,
@@ -32,13 +34,13 @@ export default function AdminAnalyticsPage() {
 
   const loadData = useCallback(async () => {
     const [m, topData] = await Promise.all([
-      getAnalyticsMetrics(period),
-      getTopBusinessesAnalytics(),
+      getAnalyticsMetrics(period, selectedCityId !== 'all' ? selectedCityId : undefined),
+      getTopBusinessesAnalytics(selectedCityId !== 'all' ? selectedCityId : undefined),
     ]);
     setMetrics(m);
     setTopViews(topData.topByViews);
     setTopWhatsApp(topData.topByWhatsApp);
-  }, [period]);
+  }, [period, selectedCityId]);
 
   useEffect(() => {
     loadData();
@@ -54,7 +56,7 @@ export default function AdminAnalyticsPage() {
             Painel de Analytics & Métricas
           </h1>
           <p className="text-xs text-[#52615B]">
-            Acompanhe a audiência, engajamento dos turistas e geração de contatos comerciais
+            Acompanhe a audiência, engajamento dos turistas e geração de contatos comerciais por destino
           </p>
         </div>
 

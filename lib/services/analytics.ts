@@ -75,11 +75,15 @@ export async function logBusinessEvent(
 /**
  * Reads aggregated analytics metrics for the Admin Analytics dashboard
  */
-export async function getAnalyticsMetrics(period: PeriodFilter = '30days'): Promise<AnalyticsMetrics> {
+export async function getAnalyticsMetrics(_period: PeriodFilter = '30days', cityId?: string): Promise<AnalyticsMetrics> {
   const supabase = createClient();
 
   if (supabase) {
-    const { data } = await supabase.from('business_events').select('*');
+    let query = supabase.from('business_events').select('*');
+    if (cityId && cityId !== 'all') {
+      query = query.eq('city_id', cityId);
+    }
+    const { data } = await query;
     if (data && data.length > 0) {
       const counts: AnalyticsMetrics = {
         pageViews: data.filter((e) => e.event_type === 'page_view').length || 1420,
@@ -94,26 +98,30 @@ export async function getAnalyticsMetrics(period: PeriodFilter = '30days'): Prom
     }
   }
 
+  const events = (cityId && cityId !== 'all')
+    ? memoryEvents.filter((e) => e.city_id === cityId)
+    : memoryEvents;
+
   // Simulated metrics based on memory storage + baseline DEMO data
   return {
-    pageViews: 1420 + memoryEvents.filter((e) => e.event_type === 'page_view').length,
-    businessViews: 850 + memoryEvents.filter((e) => e.event_type === 'business_view').length,
-    whatsappClicks: 310 + memoryEvents.filter((e) => e.event_type === 'whatsapp_click').length,
-    mapClicks: 240 + memoryEvents.filter((e) => e.event_type === 'map_click').length,
-    experienceViews: 490 + memoryEvents.filter((e) => e.event_type === 'experience_view').length,
-    routeViews: 380 + memoryEvents.filter((e) => e.event_type === 'route_view').length,
-    searches: 620 + memoryEvents.filter((e) => e.event_type === 'search').length,
+    pageViews: 1420 + events.filter((e) => e.event_type === 'page_view').length,
+    businessViews: 850 + events.filter((e) => e.event_type === 'business_view').length,
+    whatsappClicks: 310 + events.filter((e) => e.event_type === 'whatsapp_click').length,
+    mapClicks: 240 + events.filter((e) => e.event_type === 'map_click').length,
+    experienceViews: 490 + events.filter((e) => e.event_type === 'experience_view').length,
+    routeViews: 380 + events.filter((e) => e.event_type === 'route_view').length,
+    searches: 620 + events.filter((e) => e.event_type === 'search').length,
   };
 }
 
 /**
  * Computes business ranking by total views and WhatsApp lead generation clicks
  */
-export async function getTopBusinessesAnalytics(): Promise<{
+export async function getTopBusinessesAnalytics(cityId?: string): Promise<{
   topByViews: TopBusinessMetric[];
   topByWhatsApp: TopBusinessMetric[];
 }> {
-  const businesses = await getAllBusinessesAdmin();
+  const businesses = await getAllBusinessesAdmin(cityId);
 
   const metrics: TopBusinessMetric[] = businesses.map((b, idx) => {
     // Generate realistic relative counters for demo

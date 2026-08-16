@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Plus, 
@@ -10,33 +10,38 @@ import {
   EyeOff, 
   Crown, 
   X,
-  Search
+  Search,
+  MapPin
 } from 'lucide-react';
-import { getAllBusinessesAdmin, saveBusinessAdmin, deleteBusinessAdmin, getCategories } from '@/lib/services/data';
-import { Business, Category, BusinessPlan, BusinessStatus } from '@/types';
+import { getAllBusinessesAdmin, saveBusinessAdmin, deleteBusinessAdmin, getCategories, getAllCitiesAdmin } from '@/lib/services/data';
+import { Business, Category, BusinessPlan, BusinessStatus, City } from '@/types';
 import { ImageUploadInput } from '@/components/ui/ImageUploadInput';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminEmpresasPage() {
+  const { selectedCityId } = useAdminCity();
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [search, setSearch] = useState('');
   const [filterPlan, setFilterPlan] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBiz, setEditingBiz] = useState<Partial<Business> | null>(null);
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    const [bizList, catList] = await Promise.all([
-      getAllBusinessesAdmin(),
-      getCategories(),
+  const loadData = useCallback(async () => {
+    const [bizList, catList, cityList] = await Promise.all([
+      getAllBusinessesAdmin(selectedCityId),
+      getCategories(selectedCityId !== 'all' ? (selectedCityId === 'city-atibaia' ? 'atibaia' : 'sao-roque') : undefined),
+      getAllCitiesAdmin(),
     ]);
     setBusinesses(bizList);
     setCategories(catList);
-  };
+    setCities(cityList);
+  }, [selectedCityId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleOpenModal = (biz?: Business) => {
     if (biz) {
@@ -47,6 +52,7 @@ export default function AdminEmpresasPage() {
         slug: '',
         description: '',
         category_id: categories[0]?.id || '',
+        city_id: selectedCityId !== 'all' ? selectedCityId : 'city-sao-roque',
         address: 'São Roque - SP',
         phone: '(11) 9999-9999',
         whatsapp: '5511999999999',
@@ -119,7 +125,7 @@ export default function AdminEmpresasPage() {
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar nova empresa"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
           <span>Cadastrar Nova Empresa</span>
@@ -172,6 +178,7 @@ export default function AdminEmpresasPage() {
             <thead className="bg-[#FCFAF5] border-b border-[#e6dfd4] text-[#26332F] font-bold uppercase tracking-wider">
               <tr>
                 <th className="p-4">Empresa</th>
+                <th className="p-4">Destino / Cidade</th>
                 <th className="p-4">Categoria</th>
                 <th className="p-4">Plano</th>
                 <th className="p-4">Status</th>
@@ -179,74 +186,83 @@ export default function AdminEmpresasPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#F4EBDD] font-medium">
-              {filteredBusinesses.map((biz) => (
-                <tr key={biz.id} className="hover:bg-[#FCFAF5] transition-colors">
-                  <td className="p-4 flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
-                      <Image
-                        src={biz.main_image_url || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100&q=80'}
-                        alt={biz.name}
-                        fill
-                        className="object-cover"
-                        unoptimized={biz.main_image_url?.startsWith('data:')}
-                      />
-                    </div>
-                    <div>
-                      <span className="font-bold text-[#26332F] block">{biz.name}</span>
-                      <span className="text-[#52615B] text-[11px]">{biz.address}</span>
-                    </div>
-                  </td>
-                  <td className="p-4 text-[#26332F]">
-                    {biz.category?.name || 'Sem Categoria'}
-                  </td>
-                  <td className="p-4">
-                    <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                        biz.is_premium || biz.plan === 'premium'
-                          ? 'bg-[#F4EBDD] text-[#722F3E] border border-[#722F3E]/30'
-                          : biz.is_featured || biz.plan === 'highlight'
-                          ? 'bg-[#183A32]/10 text-[#183A32]'
-                          : 'bg-[#FCFAF5] text-[#52615B] border border-[#e6dfd4]'
-                      }`}
-                    >
-                      {(biz.is_premium || biz.plan === 'premium') && <Crown className="w-3 h-3 fill-[#722F3E]" aria-hidden="true" />}
-                      {biz.plan.toUpperCase()}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => handleToggleStatus(biz)}
-                      aria-label={`Alterar status de ${biz.name}`}
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                        biz.status === 'published'
-                          ? 'bg-[#183A32] text-[#FCFAF5]'
-                          : 'bg-[#F4EBDD] text-[#26332F]'
-                      }`}
-                    >
-                      {biz.status === 'published' ? <Eye className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
-                      <span>{biz.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
-                    </button>
-                  </td>
-                  <td className="p-4 space-x-2 whitespace-nowrap">
-                    <button
-                      onClick={() => handleOpenModal(biz)}
-                      aria-label={`Editar ${biz.name}`}
-                      className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors"
-                      title="Editar"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(biz.id)}
-                      aria-label={`Excluir ${biz.name}`}
-                      className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors"
-                      title="Excluir"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {filteredBusinesses.map((biz) => {
+                const cityName = biz.city?.name || (biz.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque');
+                return (
+                  <tr key={biz.id} className="hover:bg-[#FCFAF5] transition-colors">
+                    <td className="p-4 flex items-center gap-3">
+                      <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#FCFAF5] shrink-0 border border-[#e6dfd4]">
+                        <Image
+                          src={biz.main_image_url || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100&q=80'}
+                          alt={biz.name}
+                          fill
+                          className="object-cover"
+                          unoptimized={biz.main_image_url?.startsWith('data:')}
+                        />
+                      </div>
+                      <div>
+                        <span className="font-bold text-[#26332F] block">{biz.name}</span>
+                        <span className="text-[#52615B] text-[11px]">{biz.address}</span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#e6dfd4]">
+                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                        {cityName}
+                      </span>
+                    </td>
+                    <td className="p-4 text-[#26332F]">
+                      {biz.category?.name || 'Sem Categoria'}
+                    </td>
+                    <td className="p-4">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          biz.is_premium || biz.plan === 'premium'
+                            ? 'bg-[#F4EBDD] text-[#722F3E] border border-[#722F3E]/30'
+                            : biz.is_featured || biz.plan === 'highlight'
+                            ? 'bg-[#183A32]/10 text-[#183A32]'
+                            : 'bg-[#FCFAF5] text-[#52615B] border border-[#e6dfd4]'
+                        }`}
+                      >
+                        {(biz.is_premium || biz.plan === 'premium') && <Crown className="w-3 h-3 fill-[#722F3E]" aria-hidden="true" />}
+                        {biz.plan.toUpperCase()}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <button
+                        onClick={() => handleToggleStatus(biz)}
+                        aria-label={`Alterar status de ${biz.name}`}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${
+                          biz.status === 'published'
+                            ? 'bg-[#183A32] text-[#FCFAF5]'
+                            : 'bg-[#F4EBDD] text-[#26332F]'
+                        }`}
+                      >
+                        {biz.status === 'published' ? <Eye className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" /> : <EyeOff className="w-3 h-3" aria-hidden="true" />}
+                        <span>{biz.status === 'published' ? 'Publicado' : 'Rascunho'}</span>
+                      </button>
+                    </td>
+                    <td className="p-4 space-x-2 whitespace-nowrap">
+                      <button
+                        onClick={() => handleOpenModal(biz)}
+                        aria-label={`Editar ${biz.name}`}
+                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
+                        title="Editar"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(biz.id)}
+                        aria-label={`Excluir ${biz.name}`}
+                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
+                        title="Excluir"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -260,7 +276,7 @@ export default function AdminEmpresasPage() {
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingBiz.id ? 'Editar Empresa' : 'Cadastrar Nova Empresa'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F]">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -268,6 +284,21 @@ export default function AdminEmpresasPage() {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
+                <div>
+                  <label className="font-bold text-[#26332F] block mb-1">Cidade / Destino *</label>
+                  <select
+                    value={editingBiz.city_id || 'city-sao-roque'}
+                    onChange={(e) => setEditingBiz({ ...editingBiz, city_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                  >
+                    {cities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="font-bold text-[#26332F] block mb-1">Nome da Empresa *</label>
                   <input
@@ -356,7 +387,6 @@ export default function AdminEmpresasPage() {
                   />
                 </div>
 
-                {/* DUAL IMAGE INPUT (LOCAL FILE OR URL) */}
                 <ImageUploadInput
                   value={editingBiz.main_image_url || ''}
                   onChange={(url) => setEditingBiz({ ...editingBiz, main_image_url: url })}
@@ -379,13 +409,13 @@ export default function AdminEmpresasPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold"
+                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
                 >
                   Salvar Empresa
                 </button>

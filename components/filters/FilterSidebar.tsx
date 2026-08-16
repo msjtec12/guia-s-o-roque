@@ -21,9 +21,10 @@ import { Category } from '@/types';
 interface FilterSidebarProps {
   categories: Category[];
   totalResults: number;
+  basePath?: string;
 }
 
-export function FilterSidebar({ categories, totalResults }: FilterSidebarProps) {
+export function FilterSidebar({ categories, totalResults, basePath = '/explorar' }: FilterSidebarProps) {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -39,11 +40,13 @@ export function FilterSidebar({ categories, totalResults }: FilterSidebarProps) 
     } else {
       params.delete(key);
     }
-    router.push(`/explorar?${params.toString()}`);
+    const targetBase = basePath.endsWith('/explorar') ? basePath : `${basePath}/explorar`;
+    router.push(`${targetBase}?${params.toString()}`);
   };
 
   const clearAllFilters = () => {
-    router.push('/explorar');
+    const targetBase = basePath.endsWith('/explorar') ? basePath : `${basePath}/explorar`;
+    router.push(targetBase);
   };
 
   const hasActiveFilters = Boolean(selectedCategory || selectedPrice || selectedTag || searchParams.get('q'));

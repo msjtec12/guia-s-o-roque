@@ -8,6 +8,7 @@ import {
   Bus, 
   Compass, 
   Trees, 
+  Mountain,
   Landmark, 
   ShoppingBag, 
   Coffee, 
@@ -23,6 +24,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; 'aria-hi
   Bus,
   Compass,
   Trees,
+  Mountain,
   Landmark,
   ShoppingBag,
   Coffee,
@@ -31,14 +33,17 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; 'aria-hi
 
 interface CategoryCardProps {
   category: Category;
+  citySlug?: string;
 }
 
-export function CategoryCard({ category }: CategoryCardProps) {
+export function CategoryCard({ category, citySlug }: CategoryCardProps) {
   const IconComponent = iconMap[category.icon] || Tag;
+  const targetCitySlug = citySlug || (category.city_id === 'city-atibaia' ? 'atibaia' : 'sao-roque');
+  const categoryHref = `/${targetCitySlug}/explorar?category=${category.slug}`;
 
   return (
     <Link
-      href={`/explorar?category=${category.slug}`}
+      href={categoryHref}
       aria-label={`Ver categoria ${category.name}`}
       className="group relative overflow-hidden rounded-2xl bg-[#183A32] border border-[#245247] shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-end h-44 sm:h-48"
     >

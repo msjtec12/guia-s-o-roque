@@ -11,13 +11,14 @@ import {
   Compass,
   Wine,
   Users,
-  Check
+  Check,
+  Trees
 } from 'lucide-react';
 import { constructMetadata } from '@/lib/seo/metadata';
 
 export const metadata = constructMetadata({
-  title: 'Empresas em São Roque | Turismo, Gastronomia e Serviços',
-  description: 'Faça sua empresa ser encontrada por quem está descobrindo São Roque. Anuncie seu restaurante, vinícola ou pousada e receba contatos no WhatsApp.',
+  title: 'Para Empresas | Anuncie no Descubra',
+  description: 'Conecte sua empresa a visitantes que estão planejando sua viagem para São Roque, Atibaia e outros destinos turísticos.',
 });
 
 export default function ParaEmpresasPage() {
@@ -29,31 +30,31 @@ export default function ParaEmpresasPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#245247] text-[#D49A3A] text-xs font-semibold border border-[#82967A]/40">
             <Building2 className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Portal Comercial para Anunciantes</span>
+            <span>Portal Comercial para Anunciantes • Multicidade</span>
           </div>
 
           <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight max-w-4xl mx-auto">
-            Faça sua empresa ser encontrada por quem está descobrindo São Roque.
+            Faça sua empresa ser encontrada por quem está viajando para o seu destino.
           </h1>
 
           <p className="text-base sm:text-lg text-[#F4EBDD]/90 max-w-3xl mx-auto leading-relaxed">
-            Seu cliente já está procurando o que fazer em São Roque. O Descubra São Roque conecta visitantes a empresas, experiências e serviços locais.
+            Seu cliente já está procurando o que fazer em São Roque e Atibaia. A plataforma Descubra conecta turistas a experiências, restaurantes, hospedagens e comércios locais.
           </p>
 
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Link
               href="/cadastro-parceiro"
-              aria-label="Quero ser parceiro fundador"
+              aria-label="Quero cadastrar minha empresa"
               className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-base px-8 py-4 rounded-2xl shadow-xl transition-all transform active:scale-95"
             >
-              <span>Quero Ser Parceiro Fundador</span>
+              <span>Quero Cadastrar Minha Empresa</span>
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* SEÇÃO: SEJA UM PARCEIRO FUNDADOR (COM ÍCONE LUCIDE WINE / SPARKLES) */}
+      {/* SEÇÃO: SEJA UM PARCEIRO FUNDADOR */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#722F3E] text-[#FCFAF5] rounded-3xl p-8 sm:p-12 border-2 border-[#D49A3A]/60 shadow-2xl space-y-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
@@ -63,27 +64,26 @@ export default function ParaEmpresasPage() {
           <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D49A3A] text-[#26332F] text-xs font-extrabold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 fill-[#26332F]" aria-hidden="true" />
-              <span>Lançamento Exclusivo</span>
+              <span>Rede Multicidade em Expansão</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#FCFAF5] flex items-center gap-2.5">
-              <Wine className="w-8 h-8 text-[#D49A3A]" aria-hidden="true" />
-              <span>Seja um Parceiro Fundador</span>
+              <span>Seja um Parceiro Oficial Descubra</span>
             </h2>
             <p className="text-sm sm:text-base text-[#F4EBDD] leading-relaxed">
-              Estamos selecionando os primeiros parceiros do Descubra São Roque com benefícios e condições especiais de lançamento comercial.
+              Destaque seu negócio nas páginas de São Roque, Atibaia e novas cidades da rede com benefícios exclusivos e contato direto por WhatsApp.
             </p>
           </div>
 
-          {/* BENEFÍCIOS DO PARCEIRO FUNDADOR */}
+          {/* BENEFÍCIOS DO PARCEIRO */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-semibold">
             {[
-              'Perfil completo no guia',
+              'Perfil exclusivo no guia do destino',
               'Galeria de fotos em alta resolução',
               'Link direto para o seu WhatsApp',
               'Redirecionamento para Instagram',
               'Destaque na sua categoria',
               'Participação prioritária em Roteiros',
-              'Condições especiais de lançamento',
+              'Relatórios e métricas de cliques',
               'Suporte no cadastro do perfil',
             ].map((item, idx) => (
               <div key={idx} className="bg-[#8d3d4e]/70 p-3.5 rounded-xl border border-[#FCFAF5]/20 flex items-center gap-2.5">
@@ -93,14 +93,20 @@ export default function ParaEmpresasPage() {
             ))}
           </div>
 
-          <div className="pt-4 flex justify-start">
+          <div className="pt-4 flex flex-wrap gap-4 items-center">
             <Link
-              href="/cadastro-parceiro"
-              aria-label="Quero ser parceiro fundador"
-              className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg transition-all"
+              href="/cadastro-parceiro?city=sao-roque"
+              className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all"
             >
-              <span>Quero ser Parceiro Fundador</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              <Wine className="w-4 h-4" />
+              <span>Cadastrar em São Roque</span>
+            </Link>
+            <Link
+              href="/cadastro-parceiro?city=atibaia"
+              className="inline-flex items-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg border border-white/20 transition-all"
+            >
+              <Trees className="w-4 h-4 text-[#D49A3A]" />
+              <span>Cadastrar em Atibaia</span>
             </Link>
           </div>
         </div>
@@ -113,7 +119,7 @@ export default function ParaEmpresasPage() {
             Por Que Anunciar?
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#26332F]">
-            Como o Descubra São Roque gera valor para o seu negócio
+            Como o Descubra gera valor para o seu negócio
           </h2>
         </div>
 
@@ -136,7 +142,7 @@ export default function ParaEmpresasPage() {
             </div>
             <h4 className="font-serif font-bold text-base text-[#26332F]">2. DESCOBERTA</h4>
             <p className="text-xs text-[#52615B] leading-relaxed">
-              Destaque para suas especialidades, pratos, vinhos e passeios exclusivos.
+              Destaque para suas especialidades, pratos, vinhos, passeios e chalés.
             </p>
           </div>
 
@@ -264,7 +270,7 @@ export default function ParaEmpresasPage() {
           <div className="bg-[#722F3E] text-[#FCFAF5] rounded-3xl p-8 border border-[#8d3d4e] shadow-md flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-1.5 text-xs font-bold text-[#D49A3A] uppercase tracking-wider">
-                <Crown className="w-4 h-4" aria-hidden="true" />
+                <Crown className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Plano VIP</span>
               </div>
               <h3 className="font-serif text-2xl font-bold text-[#FCFAF5]">

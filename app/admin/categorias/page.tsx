@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Plus, 
@@ -9,25 +9,32 @@ import {
   CheckCircle2, 
   XCircle, 
   X, 
-  Wine
+  Compass
 } from 'lucide-react';
-import { getCategories, saveCategoryAdmin, deleteCategoryAdmin } from '@/lib/services/data';
-import { Category } from '@/types';
+import { getCategories, saveCategoryAdmin, deleteCategoryAdmin, getAllCitiesAdmin } from '@/lib/services/data';
+import { Category, City } from '@/types';
 import { ImageUploadInput } from '@/components/ui/ImageUploadInput';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminCategoriasPage() {
+  const { selectedCityId } = useAdminCity();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCat, setEditingCat] = useState<Partial<Category> | null>(null);
 
+  const loadCategories = useCallback(async () => {
+    const [list, cityList] = await Promise.all([
+      getCategories(selectedCityId !== 'all' ? (selectedCityId === 'city-atibaia' ? 'atibaia' : 'sao-roque') : undefined),
+      getAllCitiesAdmin(),
+    ]);
+    setCategories(list);
+    setCities(cityList);
+  }, [selectedCityId]);
+
   useEffect(() => {
     loadCategories();
-  }, []);
-
-  const loadCategories = async () => {
-    const list = await getCategories();
-    setCategories(list);
-  };
+  }, [loadCategories]);
 
   const handleOpenModal = (cat?: Category) => {
     if (cat) {
@@ -37,7 +44,8 @@ export default function AdminCategoriasPage() {
         name: '',
         slug: '',
         description: '',
-        icon: 'Wine',
+        city_id: selectedCityId !== 'all' ? selectedCityId : 'city-sao-roque',
+        icon: 'Compass',
         image_url: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
         is_active: true,
       });
@@ -81,13 +89,13 @@ export default function AdminCategoriasPage() {
             Gerenciar Categorias
           </h1>
           <p className="text-xs text-[#52615B]">
-            Cadastre, edite e ative categorias para filtrar vinícolas, restaurantes, hotéis e atrações
+            Cadastre, edite e ative categorias para filtrar vinícolas, restaurantes, hotéis, cervejarias e atrações
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar nova categoria"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
           <span>Cadastrar Nova Categoria</span>
@@ -96,83 +104,90 @@ export default function AdminCategoriasPage() {
 
       {/* CATEGORIES CARDS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {categories.map((cat) => (
-          <div key={cat.id} className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm overflow-hidden flex flex-col justify-between">
-            <div className="relative h-32 w-full bg-[#FCFAF5]">
-              {cat.image_url && (
-                <Image
-                  src={cat.image_url}
-                  alt={cat.name}
-                  fill
-                  className="object-cover"
-                  unoptimized={cat.image_url.startsWith('data:')}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#26332F]/70 via-[#26332F]/20 to-transparent" />
-              
-              <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#FCFAF5] text-[#183A32] flex items-center justify-center font-bold shadow-xs">
-                  <Wine className="w-4 h-4" aria-hidden="true" />
+        {categories.map((cat) => {
+          const cityName = cat.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque';
+
+          return (
+            <div key={cat.id} className="bg-white rounded-2xl border border-[#e6dfd4] shadow-sm overflow-hidden flex flex-col justify-between">
+              <div className="relative h-32 w-full bg-[#FCFAF5]">
+                {cat.image_url && (
+                  <Image
+                    src={cat.image_url}
+                    alt={cat.name}
+                    fill
+                    className="object-cover"
+                    unoptimized={cat.image_url.startsWith('data:')}
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#26332F]/70 via-[#26332F]/20 to-transparent" />
+                
+                <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-[#FCFAF5] text-[#183A32] flex items-center justify-center font-bold shadow-xs">
+                    <Compass className="w-4 h-4" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-bold text-[#FCFAF5]">
+                      {cat.name}
+                    </h3>
+                    <span className="text-[10px] text-[#D49A3A] font-semibold block">{cityName}</span>
+                  </div>
                 </div>
-                <h3 className="font-serif text-base font-bold text-[#FCFAF5]">
-                  {cat.name}
-                </h3>
-              </div>
 
-              <div className="absolute top-3 right-3">
-                <button
-                  onClick={() => handleToggleActive(cat)}
-                  aria-label={`Alternar status da categoria ${cat.name}`}
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-xs ${
-                    cat.is_active !== false
-                      ? 'bg-[#183A32] text-[#FCFAF5]'
-                      : 'bg-[#F4EBDD] text-[#722F3E]'
-                  }`}
-                >
-                  {cat.is_active !== false ? (
-                    <>
-                      <CheckCircle2 className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" />
-                      <span>Ativa</span>
-                    </>
-                  ) : (
-                    <>
-                      <XCircle className="w-3 h-3 text-[#722F3E]" aria-hidden="true" />
-                      <span>Inativa</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-              <p className="text-xs text-[#52615B] leading-relaxed line-clamp-2">
-                {cat.description}
-              </p>
-
-              <div className="pt-3 border-t border-[#F4EBDD] flex items-center justify-between text-xs">
-                <span className="text-[11px] font-semibold text-[#82967A]">Slug: {cat.slug}</span>
-                <div className="flex items-center gap-2">
+                <div className="absolute top-3 right-3">
                   <button
-                    onClick={() => handleOpenModal(cat)}
-                    aria-label={`Editar categoria ${cat.name}`}
-                    className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors"
-                    title="Editar"
+                    onClick={() => handleToggleActive(cat)}
+                    aria-label={`Alternar status da categoria ${cat.name}`}
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-xs cursor-pointer ${
+                      cat.is_active !== false
+                        ? 'bg-[#183A32] text-[#FCFAF5]'
+                        : 'bg-[#F4EBDD] text-[#722F3E]'
+                    }`}
                   >
-                    <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(cat.id)}
-                    aria-label={`Excluir categoria ${cat.name}`}
-                    className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors"
-                    title="Excluir"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                    {cat.is_active !== false ? (
+                      <>
+                        <CheckCircle2 className="w-3 h-3 text-[#D49A3A]" aria-hidden="true" />
+                        <span>Ativa</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="w-3 h-3 text-[#722F3E]" aria-hidden="true" />
+                        <span>Inativa</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
+
+              <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                <p className="text-xs text-[#52615B] leading-relaxed line-clamp-2">
+                  {cat.description}
+                </p>
+
+                <div className="pt-3 border-t border-[#F4EBDD] flex items-center justify-between text-xs">
+                  <span className="text-[11px] font-semibold text-[#82967A]">Slug: {cat.slug}</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleOpenModal(cat)}
+                      aria-label={`Editar categoria ${cat.name}`}
+                      className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
+                      title="Editar"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(cat.id)}
+                      aria-label={`Excluir categoria ${cat.name}`}
+                      className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
+                      title="Excluir"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* EDIT / CREATE MODAL */}
@@ -183,13 +198,28 @@ export default function AdminCategoriasPage() {
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingCat.id ? 'Editar Categoria' : 'Cadastrar Nova Categoria'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F]">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="space-y-3">
+                <div>
+                  <label className="font-bold text-[#26332F] block mb-1">Destino / Cidade *</label>
+                  <select
+                    value={editingCat.city_id || 'city-sao-roque'}
+                    onChange={(e) => setEditingCat({ ...editingCat, city_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                  >
+                    {cities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="font-bold text-[#26332F] block mb-1">Nome da Categoria *</label>
                   <input
@@ -216,14 +246,13 @@ export default function AdminCategoriasPage() {
                   <label className="font-bold text-[#26332F] block mb-1">Ícone (Nome Lucide)</label>
                   <input
                     type="text"
-                    value={editingCat.icon || 'Wine'}
+                    value={editingCat.icon || 'Compass'}
                     onChange={(e) => setEditingCat({ ...editingCat, icon: e.target.value })}
-                    placeholder="Wine, Utensils, Hotel, Bus..."
+                    placeholder="Wine, Mountain, Utensils, Hotel, Bus..."
                     className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
                   />
                 </div>
 
-                {/* DUAL IMAGE INPUT (LOCAL FILE OR URL) */}
                 <ImageUploadInput
                   value={editingCat.image_url || ''}
                   onChange={(url) => setEditingCat({ ...editingCat, image_url: url })}
@@ -245,13 +274,13 @@ export default function AdminCategoriasPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold"
+                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
                 >
                   Salvar Categoria
                 </button>

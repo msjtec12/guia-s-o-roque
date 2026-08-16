@@ -7,9 +7,13 @@ import { formatCurrency } from '@/lib/utils';
 
 interface ExperienceCardProps {
   experience: Experience;
+  citySlug?: string;
 }
 
-export function ExperienceCard({ experience }: ExperienceCardProps) {
+export function ExperienceCard({ experience, citySlug }: ExperienceCardProps) {
+  const targetCitySlug = citySlug || (experience.city_id === 'city-atibaia' ? 'atibaia' : 'sao-roque');
+  const experienceHref = `/${targetCitySlug}/experiencia/${experience.slug}`;
+
   return (
     <div className="group bg-white rounded-2xl border border-[#e6dfd4] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full card-hover">
       <div className="relative h-48 w-full bg-[#FCFAF5] overflow-hidden">
@@ -41,7 +45,7 @@ export function ExperienceCard({ experience }: ExperienceCardProps) {
               {experience.business.name}
             </span>
           )}
-          <Link href={`/experiencia/${experience.slug}`}>
+          <Link href={experienceHref}>
             <h3 className="font-serif text-base font-bold text-[#26332F] group-hover:text-[#183A32] transition-colors line-clamp-2">
               {experience.name}
             </h3>
@@ -57,7 +61,7 @@ export function ExperienceCard({ experience }: ExperienceCardProps) {
             Experiência Recomendada
           </span>
           <Link
-            href={`/experiencia/${experience.slug}`}
+            href={experienceHref}
             className="inline-flex items-center gap-1 text-xs font-semibold text-[#183A32] hover:text-[#722F3E] bg-[#F4EBDD] hover:bg-[#e8dbca] px-3 py-2 rounded-xl transition-all"
           >
             <span>Conhecer</span>

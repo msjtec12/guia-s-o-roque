@@ -4,378 +4,363 @@ import Image from 'next/image';
 import { 
   Compass, 
   Sparkles, 
-  Wine, 
+  MapPin, 
+  Heart,
+  Users,
   Utensils, 
   Hotel, 
   Trees, 
-  Heart,
-  Users,
-  Bus,
-  Compass as Adventure,
-  ShoppingBag,
-  Landmark,
-  ChevronRight
+  Bus, 
+  Landmark, 
+  ShoppingBag, 
+  ArrowRight,
+  ChevronRight,
+  Wine,
+  Building2,
+  Mountain
 } from 'lucide-react';
-import { 
-  getCategories, 
-  getBusinesses, 
-  getExperiences, 
-  getRoutes, 
-  getEvents 
-} from '@/lib/services/data';
-import { CategoryCard } from '@/components/tourism/CategoryCard';
-import { BusinessCard } from '@/components/tourism/BusinessCard';
-import { ExperienceCard } from '@/components/tourism/ExperienceCard';
-import { RouteCard } from '@/components/tourism/RouteCard';
-import { EventCard } from '@/components/tourism/EventCard';
-import { SearchBar } from '@/components/filters/SearchBar';
-import { PartnerCTA } from '@/components/tourism/PartnerCTA';
+import { getCities } from '@/lib/services/data';
+import { CityCard } from '@/components/tourism/CityCard';
 import { constructMetadata } from '@/lib/seo/metadata';
 
 export const metadata = constructMetadata({
-  title: 'Descubra São Roque | Turismo, Vinícolas, Restaurantes e Passeios',
-  description: 'Descubra lugares, experiências e sabores de São Roque - SP. O guia turístico definitivo para vinícolas, gastronomia, hospedagem e passeios.',
+  title: 'Descubra | Destinos, lugares e experiências',
+  description: 'Encontre destinos, lugares, experiências, gastronomia, hospedagem e passeios.',
 });
 
 export const revalidate = 60;
 
-export default async function HomePage() {
-  const [categories, businesses, experiences, routes, events] = await Promise.all([
-    getCategories(),
-    getBusinesses(),
-    getExperiences(true),
-    getRoutes(),
-    getEvents(),
-  ]);
+export default async function InstitutionalHomePage() {
+  const cities = await getCities();
 
-  const gastronomyBusinesses = businesses.filter(
-    (b) => b.category?.slug === 'restaurantes' || b.category?.slug === 'cafes-docerias'
-  ).slice(0, 3);
-
-  const quickExperienceTypes = [
-    { label: 'Vinho & Gastronomia', icon: Wine, href: '/explorar?tag=vinho', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
-    { label: 'Romântico & Casal', icon: Heart, href: '/explorar?tag=romantico', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
-    { label: 'Passeio em Família', icon: Users, href: '/explorar?tag=familia', bg: 'bg-[#F4EBDD] text-[#26332F] border-[#e6dfd4]' },
-    { label: 'Natureza & Mirantes', icon: Trees, href: '/explorar?tag=natureza', bg: 'bg-[#82967A]/15 text-[#183A32] border-[#82967A]/30' },
-    { label: 'Trilhas & Aventura', icon: Adventure, href: '/explorar?tag=aventura', bg: 'bg-[#82967A]/15 text-[#183A32] border-[#82967A]/30' },
-    { label: 'Restaurantes & Cafés', icon: Utensils, href: '/explorar?category=restaurantes', bg: 'bg-[#B86F52]/15 text-[#B86F52] border-[#B86F52]/30' },
-    { label: 'Compras & Doces', icon: ShoppingBag, href: '/explorar?category=compras-doces', bg: 'bg-[#F4EBDD] text-[#26332F] border-[#e6dfd4]' },
-    { label: 'Cultura & História', icon: Landmark, href: '/explorar?category=cultura-historia', bg: 'bg-[#F4EBDD] text-[#26332F] border-[#e6dfd4]' },
+  const generalCategories = [
+    { label: 'Gastronomia', icon: Utensils, desc: 'Restaurantes, vinícolas, cafés e sabores regionais', bg: 'bg-[#B86F52]/10 text-[#B86F52] border-[#B86F52]/20' },
+    { label: 'Hospedagem', icon: Hotel, desc: 'Hotéis fazenda, resorts, chalés e pousadas de charme', bg: 'bg-[#183A32]/10 text-[#183A32] border-[#183A32]/20' },
+    { label: 'Natureza', icon: Trees, desc: 'Parques ecológicos, mirantes, cachoeiras e ar puro', bg: 'bg-[#82967A]/15 text-[#183A32] border-[#82967A]/30' },
+    { label: 'Passeios', icon: Bus, desc: 'Trens turísticos, teleféricos, agências e transporte local', bg: 'bg-[#D49A3A]/15 text-[#26332F] border-[#D49A3A]/30' },
+    { label: 'Cultura', icon: Landmark, desc: 'Patrimônio histórico, casarões coloniais e manifestações', bg: 'bg-[#F4EBDD] text-[#26332F] border-[#e6dfd4]' },
+    { label: 'Compras', icon: ShoppingBag, desc: 'Empórios artesanais, doces típicos, queijos e flores', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
+    { label: 'Romântico', icon: Heart, desc: 'Experiências a dois, jantares à luz de velas e lareira', bg: 'bg-[#722F3E]/10 text-[#722F3E] border-[#722F3E]/20' },
+    { label: 'Família', icon: Users, desc: 'Atrações infantis, fazendinhas, lagos e parquinhos', bg: 'bg-[#183A32]/10 text-[#183A32] border-[#183A32]/20' },
   ];
 
   return (
-    <div className="space-y-16 pb-20 bg-[#FCFAF5]">
+    <div className="space-y-20 pb-20 bg-[#FCFAF5]">
       
-      {/* 1. HERO SECTION DESKTOP & MOBILE */}
-      <section className="relative min-h-[620px] sm:min-h-[670px] lg:min-h-[70vh] flex items-center justify-center overflow-hidden bg-[#183A32] text-[#FCFAF5]">
+      {/* 1. HERO INSTITUCIONAL DESCUBRA */}
+      <section className="relative min-h-[640px] sm:min-h-[720px] lg:min-h-[78vh] flex items-center justify-center overflow-hidden bg-[#183A32] text-[#FCFAF5]">
         
-        {/* NEW HERO IMAGE (PRESERVES VINEYARDS AND LANDSCAPE ON DESKTOP & MOBILE) */}
+        {/* HERO PHOTOGRAPHIC COMPOSITION */}
         <Image
           src="/images/hero-sao-roque.webp"
-          alt="Paisagem de vinhedos e natureza de São Roque, São Paulo"
+          alt="Destinos turísticos brasileiros, montanhas e paisagens"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[60%_center] sm:object-center opacity-95 transition-all duration-1000"
+          className="object-cover object-center opacity-90 transition-all duration-1000 scale-100"
         />
 
-        {/* ELEGANT VERDE MATA OVERLAY GRADIENT */}
+        {/* ELEGANT DARK GRADIENT OVERLAY */}
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(180deg, rgba(24,58,50,0.35) 0%, rgba(24,58,50,0.55) 50%, rgba(24,58,50,0.82) 100%)'
+            background: 'linear-gradient(180deg, rgba(24,58,50,0.40) 0%, rgba(24,58,50,0.65) 45%, rgba(24,58,50,0.92) 100%)'
           }}
         />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8 py-12 sm:py-16">
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-8 py-16">
           
           {/* BADGE SUPERIOR */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#183A32]/85 text-[#FCFAF5] text-xs sm:text-sm font-medium backdrop-blur-md border border-white/20 shadow-lg">
-            <Wine className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
-            <span>Estância Turística de São Roque - SP</span>
+            <Compass className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+            <span>Rede de Guias Turísticos Digitais</span>
           </div>
 
-          {/* TÍTULO HERO (HIERARQUIA E DOURADO #D49A3A) */}
-          <div className="space-y-3 sm:space-y-4">
+          {/* TÍTULO HERO COM DESTAQUE EM "DESCUBRA" */}
+          <div className="space-y-4 max-w-4xl mx-auto">
             <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#FCFAF5] drop-shadow-md leading-tight">
-              Descubra <span className="text-[#D49A3A]">São Roque</span>
+              <span className="text-[#D49A3A]">Descubra</span> novos destinos.
             </h1>
-            <p className="text-base sm:text-xl lg:text-2xl text-[#FCFAF5] font-serif italic max-w-2xl mx-auto leading-relaxed drop-shadow-sm opacity-95">
-              &ldquo;Descubra lugares, experiências e sabores de São Roque.&rdquo;
+            <p className="text-base sm:text-xl lg:text-2xl text-[#F4EBDD] font-serif italic max-w-3xl mx-auto leading-relaxed drop-shadow-sm opacity-95">
+              &ldquo;Lugares, experiências, sabores e histórias para você viver cada destino.&rdquo;
             </p>
           </div>
 
-          {/* BARRA DE PESQUISA CENTRAL (FLUTUANTE PREMIUM) */}
-          <div className="w-full max-w-2xl mx-auto space-y-4 px-2 sm:px-0">
-            <SearchBar placeholder="O que você quer descobrir? Ex.: vinícolas, restaurantes, passeios..." />
+          {/* CTAs PRINCIPAL E SECUNDÁRIO */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="#destinos"
+              className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-sm sm:text-base px-8 py-4 rounded-2xl shadow-xl transition-all transform active:scale-95"
+            >
+              <MapPin className="w-4 h-4 text-[#26332F]" aria-hidden="true" />
+              <span>Escolher um destino</span>
+            </a>
 
-            {/* BUSCAS POPULARES (CHIPS COM ÍCONES LUCIDE SVG) */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-              <span className="text-[#FCFAF5] font-medium drop-shadow-xs shrink-0">Buscas populares:</span>
-              
-              <Link href="/explorar?category=vinicolas-adegas" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Wine className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Vinícolas</span>
-              </Link>
-              
-              <Link href="/explorar?category=restaurantes" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Utensils className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Restaurantes</span>
-              </Link>
-
-              <Link href="/explorar?category=hospedagem" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Hotel className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Onde ficar</span>
-              </Link>
-
-              <Link href="/explorar?tag=natureza" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Trees className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Natureza</span>
-              </Link>
-
-              <Link href="/explorar?category=passeios-agencias" className="inline-flex items-center gap-1.5 bg-black/35 hover:bg-black/55 text-[#FCFAF5] backdrop-blur-md px-3 py-1 rounded-full border border-white/25 transition-all">
-                <Bus className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
-                <span>Passeios</span>
-              </Link>
-            </div>
+            <a
+              href="#como-funciona"
+              className="inline-flex items-center gap-2 bg-[#183A32]/80 hover:bg-[#245247] text-[#FCFAF5] font-semibold text-sm sm:text-base px-6 py-4 rounded-2xl backdrop-blur-md border border-white/20 shadow-lg transition-all"
+            >
+              <span>Conheça a plataforma</span>
+              <ChevronRight className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
+            </a>
           </div>
 
-        </div>
-
-        {/* TRANSIÇÃO SUAVE PARA A PRÓXIMA SEÇÃO (#FCFAF5) */}
-        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-[#FCFAF5] to-transparent pointer-events-none" />
-      </section>
-
-      {/* 2. CHIPS DE EXPERIÊNCIAS RÁPIDAS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e6dfd4] shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 className="font-serif text-2xl font-bold text-[#26332F]">
-                O que você deseja vivenciar hoje?
-              </h2>
-              <p className="text-xs text-[#52615B]">
-                Filtre passeios por perfil de viagem e categoria em São Roque
-              </p>
-            </div>
+          {/* DESTINATIONS QUICK CHIPS */}
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-3 text-xs">
+            <span className="text-[#F4EBDD] font-medium opacity-90">Destinos ativos:</span>
             <Link
-              href="/explorar"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#183A32] hover:text-[#245247] transition-colors"
+              href="/sao-roque"
+              className="inline-flex items-center gap-1.5 bg-black/40 hover:bg-black/60 text-[#FCFAF5] px-3.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md transition-all"
             >
-              <span>Ver todas as opções</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              <Wine className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+              <span>São Roque - SP</span>
+            </Link>
+            <Link
+              href="/atibaia"
+              className="inline-flex items-center gap-1.5 bg-black/40 hover:bg-black/60 text-[#FCFAF5] px-3.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md transition-all"
+            >
+              <Trees className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+              <span>Atibaia - SP</span>
+            </Link>
+            <Link
+              href="/socorro"
+              className="inline-flex items-center gap-1.5 bg-black/40 hover:bg-black/60 text-[#FCFAF5] px-3.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md transition-all"
+            >
+              <Compass className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+              <span>Socorro - SP</span>
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {quickExperienceTypes.map((item) => {
-              const IconComp = item.icon;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`flex items-center gap-3 p-3.5 rounded-2xl border transition-all hover:scale-[1.02] shadow-2xs ${item.bg}`}
-                >
-                  <IconComp className="w-5 h-5 shrink-0" aria-hidden="true" />
-                  <span className="text-xs font-bold leading-tight">{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
         </div>
+
+        {/* BOTTOM GRADIENT BLEND */}
+        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-[#FCFAF5] to-transparent pointer-events-none" />
       </section>
 
-      {/* 3. CATEGORIAS DE DESTAQUE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
-          <div>
-            <h2 className="font-serif text-3xl font-bold text-[#26332F]">
-              Explore por Categoria
-            </h2>
-            <p className="text-xs text-[#52615B]">
-              Encontre vinícolas, gastronomia, hospedagem e atrações na cidade
-            </p>
+      {/* 2. SEÇÃO: "ESCOLHA SEU DESTINO" (PARA ONDE VOCÊ QUER IR?) */}
+      <section id="destinos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#183A32] bg-[#F4EBDD] px-3 py-1 rounded-full border border-[#e6dfd4]">
+            <Compass className="w-3.5 h-3.5 text-[#183A32]" aria-hidden="true" />
+            <span>Destinos Selecionados</span>
           </div>
-          <Link
-            href="/explorar"
-            className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:underline"
-          >
-            <span>Ver todas</span>
-            <ChevronRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#26332F]">
+            Para onde você quer ir?
+          </h2>
+          <p className="text-sm sm:text-base text-[#52615B] leading-relaxed">
+            Explore destinos, encontre lugares especiais e monte seu próximo roteiro.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {categories.slice(0, 4).map((cat) => (
-            <CategoryCard key={cat.id} category={cat} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {cities.map((city, idx) => (
+            <CityCard key={city.id} city={city} priority={idx === 0} />
           ))}
         </div>
       </section>
 
-      {/* 4. EXPERIÊNCIAS TURÍSTICAS EM DESTAQUE */}
-      {experiences.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#722F3E] bg-[#722F3E]/10 px-3 py-1 rounded-full mb-2">
-                <Wine className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Imperdível em São Roque</span>
-              </div>
-              <h2 className="font-serif text-3xl font-bold text-[#26332F]">
-                Experiências Marcantes
-              </h2>
-            </div>
-            <Link
-              href="/experiencias"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:underline"
-            >
-              <span>Ver todas as experiências</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+      {/* 3. SEÇÃO: "COMO FUNCIONA" (3 PASSOS) */}
+      <section id="como-funciona" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-[#e6dfd4] shadow-sm space-y-10">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold text-[#82967A] uppercase tracking-wider block">
+              Simples & Completo
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#26332F]">
+              Como funciona o Descubra
+            </h2>
+            <p className="text-xs sm:text-sm text-[#52615B] leading-relaxed">
+              Do planejamento ao passeio, o Descubra ajuda você a encontrar lugares, experiências e serviços locais.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {experiences.slice(0, 3).map((exp) => (
-              <ExperienceCard key={exp.id} experience={exp} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 5. MONTE SEU ROTEIRO CTA WIZARD */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#183A32] text-[#FCFAF5] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-[#82967A]/30">
-          {/* REALISTIC PHOTO BACKGROUND WITH VERDE MATA OVERLAY */}
-          <Image
-            src="/images/banner-roteiro.jpg"
-            alt="Casal desfrutando de vinho e gastronomia nos vinhedos de São Roque"
-            fill
-            className="object-cover object-center opacity-35 transition-transform duration-1000"
-            sizes="(max-width: 1200px) 100vw, 1200px"
-          />
-
-          {/* GRADIENT OVERLAY FOR MAXIMUM READABILITY */}
-          <div 
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(90deg, rgba(24,58,50,0.92) 0%, rgba(24,58,50,0.85) 50%, rgba(24,58,50,0.55) 100%)'
-            }}
-          />
-
-          <div className="relative z-10 max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 bg-[#D49A3A] text-[#26332F] font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md">
-              <Compass className="w-4 h-4 text-[#26332F]" aria-hidden="true" />
-              <span>Roteiro Inteligente em 3 Passos</span>
+            
+            <div className="bg-[#FCFAF5] p-6 sm:p-8 rounded-2xl border border-[#e6dfd4] space-y-4 text-center md:text-left relative">
+              <span className="font-serif text-4xl font-extrabold text-[#D49A3A]/40 block">01</span>
+              <div className="w-12 h-12 rounded-xl bg-[#183A32] text-[#D49A3A] flex items-center justify-center mx-auto md:mx-0 shadow-sm">
+                <MapPin className="w-6 h-6" aria-hidden="true" />
+              </div>
+              <h3 className="font-serif text-lg font-bold text-[#26332F]">
+                Escolha seu destino
+              </h3>
+              <p className="text-xs text-[#52615B] leading-relaxed">
+                Selecione a cidade que você deseja visitar e acesse um guia digital completo e atualizado do destino.
+              </p>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight drop-shadow-md">
-              Não sabe por onde começar? Monte seu roteiro personalizado!
-            </h2>
-            <p className="text-sm sm:text-base text-[#F4EBDD] leading-relaxed drop-shadow-sm">
-              Responda a 3 perguntas simples e nossa inteligência vai sugerir a sequência perfeita de vinícolas, almoço e passeios para o seu dia.
-            </p>
-            <div className="pt-2">
-              <Link
-                href="/roteiros/montar"
-                className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28b32] text-[#26332F] font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg transition-all active:scale-95"
-              >
-                <Sparkles className="w-4 h-4" aria-hidden="true" />
-                <span>Montar Meu Roteiro Agora</span>
-              </Link>
+
+            <div className="bg-[#FCFAF5] p-6 sm:p-8 rounded-2xl border border-[#e6dfd4] space-y-4 text-center md:text-left relative">
+              <span className="font-serif text-4xl font-extrabold text-[#D49A3A]/40 block">02</span>
+              <div className="w-12 h-12 rounded-xl bg-[#722F3E] text-[#FCFAF5] flex items-center justify-center mx-auto md:mx-0 shadow-sm">
+                <Sparkles className="w-6 h-6 text-[#D49A3A]" aria-hidden="true" />
+              </div>
+              <h3 className="font-serif text-lg font-bold text-[#26332F]">
+                Encontre o que fazer
+              </h3>
+              <p className="text-xs text-[#52615B] leading-relaxed">
+                Navegue por restaurantes, vinícolas, passeios, hospedagens, experiências exclusivas e eventos locais.
+              </p>
             </div>
+
+            <div className="bg-[#FCFAF5] p-6 sm:p-8 rounded-2xl border border-[#e6dfd4] space-y-4 text-center md:text-left relative">
+              <span className="font-serif text-4xl font-extrabold text-[#D49A3A]/40 block">03</span>
+              <div className="w-12 h-12 rounded-xl bg-[#D49A3A] text-[#26332F] flex items-center justify-center mx-auto md:mx-0 shadow-sm">
+                <Heart className="w-6 h-6 fill-[#26332F]" aria-hidden="true" />
+              </div>
+              <h3 className="font-serif text-lg font-bold text-[#26332F]">
+                Viva a experiência
+              </h3>
+              <p className="text-xs text-[#52615B] leading-relaxed">
+                Conecte-se diretamente com os estabelecimentos pelo WhatsApp oficial e aproveite cada momento.
+              </p>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* 6. GASTRONOMIA E RESTAURANTES */}
-      {gastronomyBusinesses.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
-            <div>
-              <h2 className="font-serif text-3xl font-bold text-[#26332F]">
-                Gastronomia de Excelência
-              </h2>
-              <p className="text-xs text-[#52615B]">
-                Restaurantes portugueses, italianos e culinária caipira harmonizados com ótimos vinhos
+      {/* 4. SEÇÃO: "ENCONTRE O QUE VOCÊ PROCURA" (CATEGORIAS GERAIS INDUSTRIAIS EDITORIAL) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
+          <div>
+            <h2 className="font-serif text-3xl font-bold text-[#26332F]">
+              Encontre o que você procura
+            </h2>
+            <p className="text-xs text-[#52615B]">
+              Categorias organizadas para facilitar o planejamento da sua viagem
+            </p>
+          </div>
+          <a
+            href="#destinos"
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:text-[#722F3E] transition-colors"
+          >
+            <span>Ver destinos</span>
+            <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {generalCategories.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.label}
+                className="bg-white rounded-2xl p-5 border border-[#e6dfd4] shadow-2xs hover:shadow-md transition-all space-y-3 group"
+              >
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${item.bg}`}>
+                  <Icon className="w-5 h-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-base font-bold text-[#26332F] group-hover:text-[#183A32] transition-colors">
+                    {item.label}
+                  </h3>
+                  <p className="text-[11px] text-[#52615B] leading-relaxed mt-1 line-clamp-2">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 5. SEÇÃO: "DOIS DESTINOS PARA COMEÇAR" (DESTAQUES EDITORIAIS) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <span className="text-xs font-bold text-[#82967A] uppercase tracking-wider block">
+            Destaques Regionais
+          </span>
+          <h2 className="font-serif text-3xl font-bold text-[#26332F]">
+            Dois destinos para começar
+          </h2>
+          <p className="text-xs sm:text-sm text-[#52615B]">
+            Experiências autênticas perto de você para curtir no final de semana ou nas férias.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* DESTAQUE SÃO ROQUE */}
+          <div className="bg-[#183A32] text-[#FCFAF5] rounded-3xl p-8 sm:p-10 border border-[#245247] shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden">
+            <div className="space-y-4 relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#722F3E] text-[#FCFAF5] text-xs font-bold">
+                <Wine className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+                <span>Roteiro do Vinho & Gastronomia</span>
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#FCFAF5]">
+                São Roque
+              </h3>
+              <p className="text-xs sm:text-sm text-[#F4EBDD] leading-relaxed">
+                Vinhos, gastronomia e experiências. Conheça vinícolas históricas, culinária portuguesa e italiana, pisa da uva e belos parreirais a apenas 60 km da capital.
               </p>
             </div>
-            <Link
-              href="/explorar?category=restaurantes"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:underline"
-            >
-              <span>Ver todos os restaurantes</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+
+            <div className="pt-4 border-t border-[#245247] relative z-10">
+              <Link
+                href="/sao-roque"
+                className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all"
+              >
+                <span>Descobrir São Roque</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {gastronomyBusinesses.map((biz) => (
-              <BusinessCard key={biz.id} business={biz} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 7. ROTEIROS TEMÁTICOS PRONTOS */}
-      {routes.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
-            <div>
-              <h2 className="font-serif text-3xl font-bold text-[#26332F]">
-                Roteiros Prontos para Inspirar
-              </h2>
-              <p className="text-xs text-[#52615B]">
-                Itinerários pensados para casais, famílias e grupos de amigos
+          {/* DESTAQUE ATIBAIA */}
+          <div className="bg-[#183A32] text-[#FCFAF5] rounded-3xl p-8 sm:p-10 border border-[#245247] shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden">
+            <div className="space-y-4 relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#245247] text-[#D49A3A] text-xs font-bold border border-[#82967A]/40">
+                <Mountain className="w-3.5 h-3.5 text-[#D49A3A]" aria-hidden="true" />
+                <span>Pedra Grande & Aventura</span>
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#FCFAF5]">
+                Atibaia
+              </h3>
+              <p className="text-xs sm:text-sm text-[#F4EBDD] leading-relaxed">
+                Natureza, aventura e gastronomia. Voo livre de parapente da Pedra Grande, colheita de morangos, teleférico, cervejas artesanais e clima serrano.
               </p>
             </div>
-            <Link
-              href="/roteiros"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:underline"
-            >
-              <span>Ver todos os roteiros</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {routes.map((routeItem) => (
-              <RouteCard key={routeItem.id} route={routeItem} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 8. AGENDA DE EVENTOS DA CIDADE */}
-      {events.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e6dfd4] pb-4">
-            <div>
-              <h2 className="font-serif text-3xl font-bold text-[#26332F]">
-                Agenda de Eventos
-              </h2>
-              <p className="text-xs text-[#52615B]">
-                Festivais, pisa da uva, shows e feiras em São Roque
-              </p>
+            <div className="pt-4 border-t border-[#245247] relative z-10">
+              <Link
+                href="/atibaia"
+                className="inline-flex items-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all"
+              >
+                <span>Descobrir Atibaia</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
             </div>
-            <Link
-              href="/eventos"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#183A32] hover:underline"
-            >
-              <span>Ver agenda completa</span>
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {events.slice(0, 3).map((evt) => (
-              <EventCard key={evt.id} event={evt} />
-            ))}
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* 9. BANNER PARCEIRO ANUNCIANTE CTA */}
+      {/* 6. SEÇÃO: "PARA EMPRESAS" (PORTAL COMERCIAL MULTICIDADE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <PartnerCTA />
+        <div className="bg-[#722F3E] text-[#FCFAF5] rounded-3xl p-8 sm:p-12 border border-[#8d3d4e] shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 text-center md:text-left max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#8d3d4e] text-[#D49A3A] text-xs font-bold border border-white/20">
+              <Building2 className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Portal para Anunciantes</span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-4xl font-bold leading-snug">
+              Seu negócio também pode fazer parte do Descubra.
+            </h2>
+            <p className="text-xs sm:text-base text-[#F4EBDD] leading-relaxed">
+              Conecte sua empresa a pessoas que estão planejando o que fazer, onde comer, onde ficar e quais experiências viver em São Roque e Atibaia.
+            </p>
+          </div>
+
+          <div className="shrink-0 flex flex-col gap-3 w-full sm:w-auto">
+            <Link
+              href="/para-empresas"
+              className="inline-flex items-center justify-center gap-2 bg-[#D49A3A] hover:bg-[#c28c32] text-[#26332F] font-bold text-sm px-8 py-4 rounded-2xl shadow-xl transition-all transform active:scale-95 text-center"
+            >
+              <span>Quero anunciar minha empresa</span>
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
       </section>
 
     </div>

@@ -3,13 +3,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Building2, ArrowRight, CheckCircle2 } from 'lucide-react';
 
-export function PartnerCTA() {
+interface PartnerCTAProps {
+  cityName?: string;
+}
+
+export function PartnerCTA({ cityName }: PartnerCTAProps) {
+  const cityDisplayName = cityName || 'São Roque';
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-[#183A32] text-[#FCFAF5] p-8 sm:p-12 shadow-2xl border border-[#245247]">
       {/* REALISTIC PHOTO BACKGROUND WITH VERDE MATA OVERLAY */}
       <Image
         src="/images/banner-parceiros.jpg"
-        alt="Dono de vinícola e restaurante em São Roque"
+        alt={`Comércio e turismo em ${cityDisplayName}`}
         fill
         className="object-cover object-center opacity-30 transition-transform duration-1000"
         sizes="(max-width: 1200px) 100vw, 1200px"
@@ -31,10 +37,10 @@ export function PartnerCTA() {
         <div className="space-y-4 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#245247]/90 text-[#D49A3A] text-xs font-semibold border border-[#82967A]/40 backdrop-blur-md shadow-md">
             <Building2 className="w-3.5 h-3.5 text-[#D49A3A]" />
-            <span>Para Estabelecimentos de São Roque</span>
+            <span>Para Estabelecimentos de {cityDisplayName}</span>
           </div>
           <h2 className="font-serif text-2xl sm:text-4xl font-bold leading-snug drop-shadow-md">
-            Tem um negócio em São Roque?
+            Tem um negócio em {cityDisplayName}?
           </h2>
           <p className="text-sm sm:text-base text-[#F4EBDD] max-w-xl leading-relaxed">
             Coloque sua empresa no principal guia digital de experiências da cidade. Aumente sua visibilidade e receba contatos diretos no seu WhatsApp.

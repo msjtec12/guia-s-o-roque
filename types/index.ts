@@ -3,10 +3,15 @@ export type City = {
   name: string;
   slug: string;
   state: string;
-  country: string;
+  country?: string;
   description: string;
-  image_url: string;
-  is_active: boolean;
+  subtitle?: string;
+  badge?: string;
+  tags?: string[];
+  image_url?: string;
+  hero_image?: string;
+  is_active?: boolean;
+  active?: boolean;
   created_at?: string;
 };
 
@@ -202,6 +207,8 @@ export type BusinessEvent = {
 };
 
 export type FilterOptions = {
+  citySlug?: string;
+  cityId?: string;
   categorySlug?: string;
   priceLevel?: string;
   searchQuery?: string;

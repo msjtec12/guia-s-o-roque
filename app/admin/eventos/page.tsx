@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Calendar, 
@@ -13,30 +13,35 @@ import {
   Search,
   MapPin
 } from 'lucide-react';
-import { getAllEventsAdmin, saveEventAdmin, deleteEventAdmin, getAllBusinessesAdmin } from '@/lib/services/data';
-import { EventItem, Business } from '@/types';
+import { getAllEventsAdmin, saveEventAdmin, deleteEventAdmin, getAllBusinessesAdmin, getAllCitiesAdmin } from '@/lib/services/data';
+import { EventItem, Business, City } from '@/types';
 import { formatDate } from '@/lib/utils';
 import { ImageUploadInput } from '@/components/ui/ImageUploadInput';
+import { useAdminCity } from '@/components/admin/AdminCityContext';
 
 export default function AdminEventosPage() {
+  const { selectedCityId } = useAdminCity();
   const [events, setEvents] = useState<EventItem[]>([]);
   const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvt, setEditingEvt] = useState<Partial<EventItem>>({ status: 'published' });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    const [evtList, bizList] = await Promise.all([
-      getAllEventsAdmin(),
-      getAllBusinessesAdmin(),
+  const loadData = useCallback(async () => {
+    const [evtList, bizList, cityList] = await Promise.all([
+      getAllEventsAdmin(selectedCityId),
+      getAllBusinessesAdmin(selectedCityId),
+      getAllCitiesAdmin(),
     ]);
     setEvents(evtList);
     setBusinesses(bizList);
-  };
+    setCities(cityList);
+  }, [selectedCityId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleOpenModal = (evtItem?: EventItem) => {
     if (evtItem) {
@@ -51,6 +56,7 @@ export default function AdminEventosPage() {
         slug: '',
         description: '',
         business_id: businesses[0]?.id || '',
+        city_id: selectedCityId !== 'all' ? selectedCityId : 'city-sao-roque',
         start_date: new Date().toISOString().split('T')[0],
         end_date: new Date().toISOString().split('T')[0],
         event_date: new Date().toISOString().split('T')[0],
@@ -109,13 +115,13 @@ export default function AdminEventosPage() {
             Gerenciar Agenda de Eventos
           </h1>
           <p className="text-xs text-[#52615B]">
-            Cadastre festivais gastronômicos, pisa da uva, feiras de vinhos e shows em São Roque
+            Cadastre festivais gastronômicos, pisa da uva, festas do morango, feiras e shows
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           aria-label="Cadastrar novo evento"
-          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4 text-[#D49A3A]" aria-hidden="true" />
           <span>Cadastrar Novo Evento</span>
@@ -143,6 +149,7 @@ export default function AdminEventosPage() {
             <thead className="bg-[#FCFAF5] border-b border-[#e6dfd4] text-[#26332F] font-bold uppercase tracking-wider">
               <tr>
                 <th className="p-4">Evento</th>
+                <th className="p-4">Destino</th>
                 <th className="p-4">Data</th>
                 <th className="p-4">Local</th>
                 <th className="p-4">Status</th>
@@ -153,6 +160,8 @@ export default function AdminEventosPage() {
               {filteredEvents.map((evt) => {
                 const displayTitle = evt.title || evt.name;
                 const displayDate = evt.start_date || evt.event_date || new Date().toISOString();
+                const cityName = evt.city_id === 'city-atibaia' ? 'Atibaia' : 'São Roque';
+
                 return (
                   <tr key={evt.id} className="hover:bg-[#FCFAF5] transition-colors">
                     <td className="p-4 flex items-center gap-3">
@@ -170,6 +179,12 @@ export default function AdminEventosPage() {
                         <span className="text-[#52615B] text-[11px] line-clamp-1">{evt.description}</span>
                       </div>
                     </td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1 bg-[#F4EBDD] text-[#183A32] px-2.5 py-1 rounded-lg text-[11px] font-bold border border-[#e6dfd4]">
+                        <MapPin className="w-3 h-3 text-[#D49A3A]" />
+                        {cityName}
+                      </span>
+                    </td>
                     <td className="p-4 text-[#26332F] whitespace-nowrap">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3 h-3 text-[#183A32]" aria-hidden="true" />
@@ -186,7 +201,7 @@ export default function AdminEventosPage() {
                       <button
                         onClick={() => handleToggleStatus(evt)}
                         aria-label={`Alterar status do evento ${displayTitle}`}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${
                           evt.status === 'published'
                             ? 'bg-[#183A32] text-[#FCFAF5]'
                             : 'bg-[#F4EBDD] text-[#26332F]'
@@ -200,7 +215,7 @@ export default function AdminEventosPage() {
                       <button
                         onClick={() => handleOpenModal(evt)}
                         aria-label={`Editar evento ${displayTitle}`}
-                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors"
+                        className="p-1.5 text-[#26332F] hover:text-[#183A32] bg-[#F4EBDD] hover:bg-[#e8dbca] rounded-lg transition-colors cursor-pointer"
                         title="Editar"
                       >
                         <Edit3 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -208,7 +223,7 @@ export default function AdminEventosPage() {
                       <button
                         onClick={() => handleDelete(evt.id)}
                         aria-label={`Excluir evento ${displayTitle}`}
-                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors"
+                        className="p-1.5 text-[#722F3E] hover:text-rose-800 bg-[#722F3E]/10 rounded-lg transition-colors cursor-pointer"
                         title="Excluir"
                       >
                         <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -230,7 +245,7 @@ export default function AdminEventosPage() {
               <h3 className="font-serif text-xl font-bold text-[#26332F]">
                 {editingEvt.id ? 'Editar Evento' : 'Cadastrar Novo Evento'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F]">
+              <button onClick={() => setIsModalOpen(false)} aria-label="Fechar modal" className="text-[#82967A] hover:text-[#26332F] cursor-pointer">
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -238,6 +253,21 @@ export default function AdminEventosPage() {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
+                <div>
+                  <label className="font-bold text-[#26332F] block mb-1">Destino / Cidade *</label>
+                  <select
+                    value={editingEvt.city_id || 'city-sao-roque'}
+                    onChange={(e) => setEditingEvt({ ...editingEvt, city_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl bg-white text-[#26332F] font-semibold"
+                  >
+                    {cities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="font-bold text-[#26332F] block mb-1">Título do Evento *</label>
                   <input
@@ -291,13 +321,12 @@ export default function AdminEventosPage() {
                     type="text"
                     value={editingEvt.location || ''}
                     onChange={(e) => setEditingEvt({ ...editingEvt, location: e.target.value })}
-                    placeholder="Ex.: Roteiro do Vinho, Estrada do Vinho km 10"
+                    placeholder="Ex.: Roteiro do Vinho / Parque Edmundo Zanoni"
                     required
                     className="w-full px-3 py-2 border border-[#e6dfd4] rounded-xl text-[#26332F]"
                   />
                 </div>
 
-                {/* DUAL IMAGE INPUT (LOCAL FILE OR URL) */}
                 <ImageUploadInput
                   value={editingEvt.image_url || ''}
                   onChange={(url) => setEditingEvt({ ...editingEvt, image_url: url })}
@@ -320,13 +349,13 @@ export default function AdminEventosPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#F4EBDD] text-[#26332F] font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold"
+                  className="px-6 py-2 rounded-xl bg-[#183A32] hover:bg-[#245247] text-[#FCFAF5] font-bold cursor-pointer"
                 >
                   Salvar Evento
                 </button>

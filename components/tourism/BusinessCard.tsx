@@ -10,12 +10,17 @@ import { getPriceSymbol } from '@/lib/utils';
 interface BusinessCardProps {
   business: Business;
   horizontal?: boolean;
+  citySlug?: string;
 }
 
-export function BusinessCard({ business, horizontal = false }: BusinessCardProps) {
+export function BusinessCard({ business, horizontal = false, citySlug }: BusinessCardProps) {
   const priceSymbol = getPriceSymbol(business.price_min);
   const isPremium = business.is_premium || business.plan === 'premium';
   const isHighlight = (business.is_featured || business.plan === 'highlight') && !isPremium;
+
+  const targetCitySlug = citySlug || business.city?.slug || (business.city_id === 'city-atibaia' ? 'atibaia' : 'sao-roque');
+  const businessHref = `/${targetCitySlug}/empresa/${business.slug}`;
+  const cityName = business.city?.name || (targetCitySlug === 'atibaia' ? 'Atibaia' : 'São Roque');
 
   return (
     <div
@@ -65,7 +70,7 @@ export function BusinessCard({ business, horizontal = false }: BusinessCardProps
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-2">
-            <Link href={`/empresa/${business.slug}`} className="group-hover:text-[#183A32] transition-colors">
+            <Link href={businessHref} className="group-hover:text-[#183A32] transition-colors">
               <h3 className="font-serif text-lg font-bold text-[#26332F] leading-snug line-clamp-1">
                 {business.name}
               </h3>
@@ -90,13 +95,14 @@ export function BusinessCard({ business, horizontal = false }: BusinessCardProps
           <WhatsAppButton
             phoneOrWhatsapp={business.whatsapp || business.phone}
             businessName={business.name}
+            cityName={cityName}
             businessId={business.id}
             variant="secondary"
             className="flex-1 text-xs py-2"
           />
 
           <Link
-            href={`/empresa/${business.slug}`}
+            href={businessHref}
             className="inline-flex items-center gap-1 text-xs font-semibold text-[#183A32] hover:text-[#722F3E] bg-[#F4EBDD] hover:bg-[#e8dbca] px-3.5 py-2.5 rounded-xl transition-all"
           >
             <span>Ver detalhes</span>

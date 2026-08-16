@@ -8,22 +8,25 @@ interface SearchBarProps {
   initialQuery?: string;
   placeholder?: string;
   className?: string;
+  basePath?: string;
 }
 
 export function SearchBar({
   initialQuery = '',
   placeholder = 'O que você quer descobrir? Ex.: vinícolas, restaurantes, passeios...',
   className = '',
+  basePath = '/explorar',
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    const targetBase = basePath.endsWith('/explorar') ? basePath : `${basePath}/explorar`;
     if (query.trim()) {
-      router.push(`/explorar?q=${encodeURIComponent(query.trim())}`);
+      router.push(`${targetBase}?q=${encodeURIComponent(query.trim())}`);
     } else {
-      router.push('/explorar');
+      router.push(targetBase);
     }
   };
 

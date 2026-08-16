@@ -8,6 +8,7 @@ import { logBusinessEvent } from '@/lib/services/analytics';
 interface WhatsAppButtonProps {
   phoneOrWhatsapp: string;
   businessName: string;
+  cityName?: string;
   businessId?: string;
   variant?: 'primary' | 'secondary' | 'compact';
   fullWidth?: boolean;
@@ -17,6 +18,7 @@ interface WhatsAppButtonProps {
 export function WhatsAppButton({
   phoneOrWhatsapp,
   businessName,
+  cityName,
   businessId,
   variant = 'primary',
   fullWidth = false,
@@ -29,7 +31,7 @@ export function WhatsAppButton({
     }
   };
 
-  const url = buildWhatsAppUrl(phoneOrWhatsapp, businessName);
+  const url = buildWhatsAppUrl(phoneOrWhatsapp, businessName, undefined, cityName);
 
   if (variant === 'compact') {
     return (
