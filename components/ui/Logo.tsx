@@ -10,6 +10,7 @@ interface LogoProps {
   className?: string;
   href?: string;
   size?: 'sm' | 'md' | 'lg';
+  showText?: boolean;
 }
 
 export function Logo({
@@ -18,31 +19,32 @@ export function Logo({
   className = '',
   href = '/',
   size = 'md',
+  showText = true,
 }: LogoProps) {
   const isLight = variant === 'light';
   const isIcon = variant === 'icon';
 
-  const sizeClasses = {
-    sm: 'h-7 w-auto',
-    md: 'h-9 sm:h-10 w-auto',
-    lg: 'h-12 sm:h-14 w-auto',
+  const imageSizes = {
+    sm: 'h-8 sm:h-9 w-auto',
+    md: 'h-11 sm:h-12 w-auto',
+    lg: 'h-14 sm:h-16 w-auto',
   };
 
   const iconSizes = {
-    sm: 'w-7 h-7',
-    md: 'w-9 h-9',
-    lg: 'w-12 h-12',
+    sm: 'w-8 h-8',
+    md: 'w-11 h-11',
+    lg: 'w-16 h-16',
   };
 
   if (isIcon) {
     const iconContent = (
-      <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-transparent transition-transform duration-300 group-hover:scale-105 ${iconSizes[size]} ${className}`}>
+      <div className={`relative flex items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-105 ${iconSizes[size]} ${className}`}>
         <Image
           src="/logo.png"
           alt="Descubra Cidades"
-          width={48}
-          height={48}
-          className="object-contain w-full h-full"
+          width={96}
+          height={96}
+          className="object-contain w-full h-full drop-shadow-md"
           priority
         />
       </div>
@@ -59,24 +61,42 @@ export function Logo({
 
   const logoContent = (
     <div className={`inline-flex items-center gap-3 group cursor-pointer ${className}`}>
-      <div className="relative flex items-center">
+      <div className="relative flex items-center shrink-0">
         <Image
           src="/logo.png"
           alt="Descubra Cidades"
-          width={180}
-          height={50}
-          className={`${sizeClasses[size]} object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm`}
+          width={220}
+          height={140}
+          className={`${imageSizes[size]} object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md`}
           priority
         />
       </div>
 
-      {cityName && (
-        <div className="flex flex-col border-l border-[#E7E5DF]/30 pl-2.5 leading-tight">
-          <span className="font-sans text-xs sm:text-sm font-extrabold tracking-wider uppercase text-[#F19F14]">
-            {cityName}
-          </span>
-          <span className={`text-[9px] font-semibold tracking-widest uppercase ${isLight ? 'text-[#E7E5DF]/80' : 'text-[#26332F]/70'}`}>
-            Guia Oficial
+      {showText && (
+        <div className="flex flex-col text-left leading-none select-none">
+          <div className="flex items-baseline gap-1.5">
+            <span
+              className={`font-serif text-xl sm:text-2xl font-extrabold tracking-tight transition-colors ${
+                isLight ? 'text-[#FFFFFF] group-hover:text-[#F19F14]' : 'text-[#071510] group-hover:text-[#107492]'
+              }`}
+            >
+              Descubra
+            </span>
+            <span
+              className={`font-sans text-sm sm:text-base font-bold tracking-wider uppercase ${
+                cityName ? 'text-[#F19F14]' : isLight ? 'text-[#F19F14]' : 'text-[#107492]'
+              }`}
+            >
+              {cityName || 'Cidades'}
+            </span>
+          </div>
+
+          <span
+            className={`text-[10px] font-semibold tracking-wider uppercase mt-0.5 transition-opacity ${
+              isLight ? 'text-[#E7E5DF]/90' : 'text-[#26332F]/70'
+            }`}
+          >
+            {cityName ? 'Guia Oficial de Turismo' : 'Lugares & Experiências'}
           </span>
         </div>
       )}
