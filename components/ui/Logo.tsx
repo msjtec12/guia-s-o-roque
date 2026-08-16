@@ -24,6 +24,10 @@ export function Logo({
   const isLight = variant === 'light';
   const isIcon = variant === 'icon';
 
+  // Use logo-light.png on dark backgrounds for bright white text & vibrant gold mark
+  // Use logo.png on light backgrounds for dark text & vibrant gold mark
+  const logoSrc = isLight ? '/logo-light.png' : '/logo.png';
+
   const imageSizes = {
     sm: 'h-8 sm:h-9 w-auto',
     md: 'h-11 sm:h-12 w-auto',
@@ -40,7 +44,7 @@ export function Logo({
     const iconContent = (
       <div className={`relative flex items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-105 ${iconSizes[size]} ${className}`}>
         <Image
-          src="/logo.png"
+          src="/icon.png"
           alt="Descubra Cidades"
           width={96}
           height={96}
@@ -63,11 +67,11 @@ export function Logo({
     <div className={`inline-flex items-center gap-3 group cursor-pointer ${className}`}>
       <div className="relative flex items-center shrink-0">
         <Image
-          src="/logo.png"
+          src={logoSrc}
           alt="Descubra Cidades"
           width={220}
           height={140}
-          className={`${imageSizes[size]} object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md`}
+          className={`${imageSizes[size]} object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]`}
           priority
         />
       </div>

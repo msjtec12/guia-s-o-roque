@@ -66,13 +66,13 @@ export function constructMetadata({
     description: finalDescription,
     icons: {
       icon: [
-        { url: '/logo.png' },
-        { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+        { url: '/favicon.ico?v=3', sizes: 'any' },
+        { url: '/icon.png?v=3', sizes: '192x192', type: 'image/png' },
       ],
       apple: [
-        { url: '/apple-icon.png' },
+        { url: '/apple-icon.png?v=3', sizes: '180x180', type: 'image/png' },
       ],
-      shortcut: '/logo.png',
+      shortcut: '/favicon.ico?v=3',
     },
     openGraph: {
       title: finalTitle,
